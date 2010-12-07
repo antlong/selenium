@@ -1,0 +1,8 @@
+Whats different?
+
+Added:
+wait_for_element()
+wait_for_element_to_disappear()
+wait_until()
+wait_for_attribute()
+wait_for_attribute_to_disappear()
