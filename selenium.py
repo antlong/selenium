@@ -1,4 +1,3 @@
-
 """
 Copyright 2006 ThoughtWorks, Inc.
 
@@ -1385,11 +1384,11 @@ class selenium:
     def wait_until(self, command, control, wait_time=60):
         for i in xrange(wait_time):
             try:
-                if command == control: break
+                if command() == control: break
             except: pass
             time.sleep(.25)
         else:
-            raise ValueError("Command never equaled the control.")
+            raise ValueError("The command %(command)s never equaled %(control)s.")
     
     def wait_for_attribute(self, locator, wait_time=60):
         for i in xrange(wait_time):
