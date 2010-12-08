@@ -1371,7 +1371,7 @@ class selenium:
             except: pass
             time.sleep(.25)
         else:
-            raise ValueError('Your locator: %s was not found within %s seconds.' % (locator, wait_time))
+            raise ValueError('Your locator: %(locator)s was not found within %(wait_time)s seconds.')
 
     def wait_for_element_to_disappear(self, locator, wait_time=60):
         for i in xrange(wait_time):
@@ -1380,7 +1380,7 @@ class selenium:
             except: pass
             time.sleep(.25)
         else:
-            raise ValueError('Your locator: %s did not disappear within %s seconds.' % (locator, wait_time))
+            raise ValueError('Your locator: %(locator)s did not disappear within %(wait_time)s seconds.')
     
     def wait_until(self, command, control, wait_time=60):
         for i in xrange(wait_time):
@@ -1391,6 +1391,15 @@ class selenium:
         else:
             raise ValueError("Command never equaled the control.")
     
+    def wait_for_attribute(self, locator, wait_time=60):
+        for i in xrange(wait_time):
+            try:
+                if self.get_attribute(locator): break
+            except: pass
+            time.sleep(.25)
+        else:
+            raise ValueError("Your attribute: %(locator)s was not found within %(wait_time)s seconds.")
+    
     def wait_for_attribute_to_disappear(self, locator, wait_time=60):
         for i in xrange(wait_time):
             try:
@@ -1398,7 +1407,7 @@ class selenium:
             except: pass
             time.sleep(.25)
         else:
-            raise ValueError("Your locator: %s did not disappear within %s seconds." % (locator, wait_time))
+            raise ValueError("Your locator: %(locator)s did not disappear within %(wait_time)s seconds.")
     
     def is_visible(self,locator):
         """
