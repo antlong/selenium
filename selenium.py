@@ -56,11 +56,9 @@ class selenium(object):
                         urllib.quote_plus(unicode(args[i]).encode('utf-8'))
             if (None != self.sessionId):
                 body += "&sessionId=" + unicode(self.sessionId)
-            headers = {
-                "Content-Type":
+            headers = {"Content-Type":
                 "application/x-www-form-urlencoded; charset=utf-8"}
             conn.request("POST", "/selenium-server/driver/", body, headers)
-            
             response = conn.getresponse()
             data = unicode(response.read(), "UTF-8")
             if (not data.startswith('OK')):
@@ -128,8 +126,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("click", [locator, ])
+        self.wait_for_element(locator)
+        self.do_command("click", [locator, ])
     
     def double_click(self, locator):
         """
@@ -139,8 +137,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("doubleClick", [locator, ])
+        self.wait_for_element(locator)
+        self.do_command("doubleClick", [locator, ])
     
     def context_menu(self, locator):
         """
@@ -148,8 +146,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("contextMenu", [locator, ])
+        self.wait_for_element(locator)
+        self.do_command("contextMenu", [locator, ])
     
     def click_at(self, locator, coordString):
         """
@@ -160,8 +158,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("clickAt", [locator, coordString, ])
+        self.wait_for_element(locator)
+        self.do_command("clickAt", [locator, coordString, ])
     
     def double_click_at(self, locator, coordString):
         """
@@ -172,8 +170,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("doubleClickAt", [locator, coordString, ])
+        self.wait_for_element(locator)
+        self.do_command("doubleClickAt", [locator, coordString, ])
     
     def context_menu_at(self, locator, coordString):
         """
@@ -182,8 +180,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("contextMenuAt", [locator, coordString, ])
+        self.wait_for_element(locator)
+        self.do_command("contextMenuAt", [locator, coordString, ])
     
     def fire_event(self, locator, eventName):
         """
@@ -193,8 +191,8 @@ class selenium(object):
         'locator' is an element locator
         'eventName' is the event name, e.g. "focus" or "blur"
         """
-        if self.wait_for_element(locator):
-            self.do_command("fireEvent", [locator, eventName, ])
+        self.wait_for_element(locator)
+        self.do_command("fireEvent", [locator, eventName, ])
     
     def focus(self, locator):
         """
@@ -202,8 +200,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("focus", [locator, ])
+        self.wait_for_element(locator)
+        self.do_command("focus", [locator, ])
     
     def key_press(self, locator, keySequence):
         """
@@ -212,8 +210,8 @@ class selenium(object):
         'locator' is an element locator
         'keySequence' is Either be a string("\" followed by the numeric keycode  of the key to be pressed, normally the ASCII value of that key), or a single  character. For example: "w", "\119".
         """
-        if self.wait_for_element(locator):
-            self.do_command("keyPress", [locator, keySequence, ])
+        self.wait_for_element(locator)
+        self.do_command("keyPress", [locator, keySequence, ])
     
     def shift_key_down(self):
         """
@@ -278,8 +276,8 @@ class selenium(object):
         'locator' is an element locator
         'keySequence' is Either be a string("\" followed by the numeric keycode  of the key to be pressed, normally the ASCII value of that key), or a single  character. For example: "w", "\119".
         """
-        if self.wait_for_element(locator):
-            self.do_command("keyDown", [locator,keySequence,])
+        self.wait_for_element(locator)
+        self.do_command("keyDown", [locator,keySequence,])
     
     def key_up(self, locator, keySequence):
         """
@@ -288,8 +286,8 @@ class selenium(object):
         'locator' is an element locator
         'keySequence' is Either be a string("\" followed by the numeric keycode  of the key to be pressed, normally the ASCII value of that key), or a single  character. For example: "w", "\119".
         """
-        if self.wait_for_element(locator):
-            self.do_command("keyUp", [locator,keySequence,])
+        self.wait_for_element(locator)
+        self.do_command("keyUp", [locator,keySequence,])
     
     def mouse_over(self, locator):
         """
@@ -297,8 +295,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseOver", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("mouseOver", [locator,])
     
     def mouse_out(self, locator):
         """
@@ -306,8 +304,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseOut", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("mouseOut", [locator,])
     
     def mouse_down(self, locator):
         """
@@ -316,8 +314,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseDown", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("mouseDown", [locator,])
     
     def mouse_down_right(self, locator):
         """
@@ -326,8 +324,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseDownRight", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("mouseDownRight", [locator,])
     
     def mouse_down_at(self, locator, coordString):
         """
@@ -337,8 +335,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseDownAt", [locator,coordString,])
+        self.wait_for_element(locator)
+        self.do_command("mouseDownAt", [locator,coordString,])
     
     def mouse_down_right_at(self, locator, coordString):
         """
@@ -348,8 +346,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseDownRightAt", [locator,coordString,])
+        self.wait_for_element(locator)
+        self.do_command("mouseDownRightAt", [locator,coordString,])
     
     def mouse_up(self, locator):
         """
@@ -358,8 +356,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseUp", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("mouseUp", [locator,])
     
     def mouse_up_right(self, locator):
         """
@@ -368,8 +366,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseUpRight", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("mouseUpRight", [locator,])
     
     def mouse_up_at(self, locator, coordString):
         """
@@ -379,8 +377,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseUpAt", [locator,coordString,])
+        self.wait_for_element(locator)
+        self.do_command("mouseUpAt", [locator,coordString,])
     
     def mouse_up_right_at(self, locator, coordString):
         """
@@ -390,8 +388,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseUpRightAt", [locator,coordString,])
+        self.wait_for_element(locator)
+        self.do_command("mouseUpRightAt", [locator,coordString,])
     
     def mouse_move(self, locator):
         """
@@ -400,8 +398,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseMove", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("mouseMove", [locator,])
     
     def mouse_move_at(self, locator, coordString):
         """
@@ -411,8 +409,8 @@ class selenium(object):
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        if self.wait_for_element(locator):
-            self.do_command("mouseMoveAt", [locator,coordString,])
+        self.wait_for_element(locator)
+        self.do_command("mouseMoveAt", [locator,coordString,])
     
     def type(self, locator, value):
         """
@@ -426,8 +424,8 @@ class selenium(object):
         'locator' is an element locator
         'value' is the value to type
         """
-        if self.wait_for_element(locator):
-            self.do_command("type", [locator,value,])
+        self.wait_for_element(locator)
+        self.do_command("type", [locator,value,])
     
     def type_keys(self, locator, value):
         """
@@ -449,8 +447,8 @@ class selenium(object):
         'locator' is an element locator
         'value' is the value to type
         """
-        if self.wait_for_element(locator):
-            self.do_command("typeKeys", [locator,value,])
+        self.wait_for_element(locator)
+        self.do_command("typeKeys", [locator,value,])
     
     def set_speed(self, value):
         """
@@ -484,8 +482,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("check", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("check", [locator,])
     
     def uncheck(self, locator):
         """
@@ -493,8 +491,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("uncheck", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("uncheck", [locator,])
     
     def select(self, selectLocator, optionLocator):
         """
@@ -544,8 +542,8 @@ class selenium(object):
         'selectLocator' is an element locator identifying a drop-down menu
         'optionLocator' is an option locator (a label by default)
         """
-        if self.wait_for_element(selectLocator):
-            self.do_command("select", [selectLocator,optionLocator,])
+        self.wait_for_element(selectLocator)
+        self.do_command("select", [selectLocator,optionLocator,])
     
     def add_selection(self, locator, optionLocator):
         """
@@ -556,8 +554,8 @@ class selenium(object):
         'locator' is an element locator identifying a multi-select box
         'optionLocator' is an option locator (a label by default)
         """
-        if self.wait_for_element(locator):
-            self.do_command("addSelection", [locator,optionLocator,])
+        self.wait_for_element(locator)
+        self.do_command("addSelection", [locator,optionLocator,])
     
     def remove_selection(self, locator, optionLocator):
         """
@@ -568,8 +566,8 @@ class selenium(object):
         'locator' is an element locator identifying a multi-select box
         'optionLocator' is an option locator (a label by default)
         """
-        if self.wait_for_element(locator):
-            self.do_command("removeSelection", [locator,optionLocator,])
+        self.wait_for_element(locator)
+        self.do_command("removeSelection", [locator,optionLocator,])
     
     def remove_all_selections(self, locator):
         """
@@ -577,8 +575,8 @@ class selenium(object):
         
         'locator' is an element locator identifying a multi-select box
         """
-        if self.wait_for_element(locator):
-            self.do_command("removeAllSelections", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("removeAllSelections", [locator,])
     
     def submit(self, formLocator):
         """
@@ -729,8 +727,8 @@ class selenium(object):
         
         'locator' is an element locator identifying a frame or iframe
         """
-        if self.wait_for_element(locator):
-            self.do_command("selectFrame", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("selectFrame", [locator,])
     
     def get_whether_this_frame_match_frame_expression(self, currentFrameString,target):
         """
@@ -995,8 +993,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            return self.get_string("getValue", [locator,])
+        self.wait_for_element(locator)
+        return self.get_string("getValue", [locator,])
     
     def get_text(self, locator):
         """
@@ -1007,8 +1005,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            return str(self.get_string("getText", [locator,]))
+        self.wait_for_element(locator)
+        return str(self.get_string("getText", [locator,]))
     
     def highlight(self, locator):
         """
@@ -1016,8 +1014,8 @@ class selenium(object):
         
         'locator' is an element locator
         """
-        if self.wait_for_element(locator):
-            self.do_command("highlight", [locator,])
+        self.wait_for_element(locator)
+        self.do_command("highlight", [locator,])
     
     def get_eval(self, script):
         """
@@ -1044,8 +1042,8 @@ class selenium(object):
         
         'locator' is an element locator pointing to a checkbox or radio button
         """
-        if self.wait_for_element(locator):
-            return self.get_boolean("isChecked", [locator,])
+        self.wait_for_element(locator)
+        return self.get_boolean("isChecked", [locator,])
     
     def get_table(self, tableCellAddress):
         """
@@ -1287,8 +1285,8 @@ class selenium(object):
         'locator' is an element locator
         'movementsString' is offset in pixels from the current location to which the element should be moved, e.g., "+70,-300"
         """
-        if self.wait_for_element(locator):
-            self.do_command("dragdrop", [locator,movementsString,])
+        self.wait_for_element(locator)
+        self.do_command("dragdrop", [locator,movementsString,])
     
     def set_mouse_speed(self, pixels):
         """
@@ -1320,8 +1318,8 @@ class selenium(object):
         'locator' is an element locator
         'movementsString' is offset in pixels from the current location to which the element should be moved, e.g., "+70,-300"
         """
-        if self.wait_for_element(locator):
-            self.do_command("dragAndDrop", [locator,movementsString,])
+        self.wait_for_element(locator)
+        self.do_command("dragAndDrop", [locator,movementsString,])
     
     def drag_and_drop_to_object(self, locatorOfObjectToBeDragged, locatorOfDragDestinationObject):
         """
@@ -1330,9 +1328,9 @@ class selenium(object):
         'locatorOfObjectToBeDragged' is an element to be dragged
         'locatorOfDragDestinationObject' is an element whose location (i.e., whose center-most pixel) will be the point where locatorOfObjectToBeDragged  is dropped
         """
-        if self.wait_for_element(locatorOfObjectToBeDragged):
-            if self.wait_for_element(locatorOfDragDestinationObject):
-                self.do_command("dragAndDropToObject", [locatorOfObjectToBeDragged,locatorOfDragDestinationObject,])
+        self.wait_for_element(locatorOfObjectToBeDragged)
+        self.wait_for_element(locatorOfDragDestinationObject)
+        self.do_command("dragAndDropToObject", [locatorOfObjectToBeDragged,locatorOfDragDestinationObject,])
     
     def window_focus(self):
         """
@@ -1385,8 +1383,8 @@ class selenium(object):
         'locator' is an element locator pointing to an input element or textarea
         'position' is the numerical position of the cursor in the field; position should be 0 to move the position to the beginning of the field.  You can also set the cursor to -1 to move it to the end of the field.
         """
-        if self.wait_for_element(locator):
-            self.do_command("setCursorPosition", [locator,position,])
+        self.wait_for_element(locator)
+        self.do_command("setCursorPosition", [locator,position,])
     
     def get_element_index(self, locator):
         """
@@ -1395,8 +1393,8 @@ class selenium(object):
         
         'locator' is an element locator pointing to an element
         """
-        if self.wait_for_element(locator):
-            return self.get_number("getElementIndex", [locator,])
+        self.wait_for_element(locator)
+        return self.get_number("getElementIndex", [locator,])
     
     def is_ordered(self, locator1, locator2):
         """
@@ -1406,9 +1404,9 @@ class selenium(object):
         'locator1' is an element locator pointing to the first element
         'locator2' is an element locator pointing to the second element
         """
-        if self.wait_for_element(locator1):
-            if self.wait_for_element(locator2):
-                return self.get_boolean("isOrdered", [locator1,locator2,])
+        self.wait_for_element(locator1)
+        self.wait_for_element(locator2)
+        return self.get_boolean("isOrdered", [locator1,locator2,])
     
     def get_element_position_left(self, locator):
         """
@@ -1416,8 +1414,8 @@ class selenium(object):
         
         'locator' is an element locator pointing to an element OR an element itself
         """
-        if self.wait_for_element(locator):
-            return self.get_number("getElementPositionLeft", [locator,])
+        self.wait_for_element(locator)
+        return self.get_number("getElementPositionLeft", [locator,])
     
     def get_element_position_top(self, locator):
         """
@@ -1425,8 +1423,8 @@ class selenium(object):
         
         'locator' is an element locator pointing to an element OR an element itself
         """
-        if self.wait_for_element(locator):
-            return self.get_number("getElementPositionTop", [locator,])
+        self.wait_for_element(locator)
+        return self.get_number("getElementPositionTop", [locator,])
     
     def get_element_width(self, locator):
         """
@@ -1434,8 +1432,8 @@ class selenium(object):
         
         'locator' is an element locator pointing to an element
         """
-        if self.wait_for_element(locator):
-            return self.get_number("getElementWidth", [locator,])
+        self.wait_for_element(locator)
+        return self.get_number("getElementWidth", [locator,])
     
     def get_element_height(self, locator):
         """
@@ -1443,8 +1441,8 @@ class selenium(object):
         
         'locator' is an element locator pointing to an element
         """
-        if self.wait_for_element(locator):
-            return self.get_number("getElementHeight", [locator,])
+        self.wait_for_element(locator)
+        return self.get_number("getElementHeight", [locator,])
     
     def get_cursor_position(self, locator):
         """
@@ -1458,8 +1456,8 @@ class selenium(object):
         
         'locator' is an element locator pointing to an input element or textarea
         """
-        if self.wait_for_element(locator):
-            return self.get_number("getCursorPosition", [locator,])
+        self.wait_for_element(locator)
+        return self.get_number("getCursorPosition", [locator,])
     
     def get_expression(self, expression):
         """
@@ -1492,8 +1490,8 @@ class selenium(object):
         'locator' is an element locator pointing to an element
         'identifier' is a string to be used as the ID of the specified element
         """
-        if self.wait_for_element(locator):
-            self.do_command("assignId", [locator,identifier,])
+        self.wait_for_element(locator)
+        self.do_command("assignId", [locator,identifier,])
     
     def allow_native_xpath(self, allow):
         """
@@ -1520,7 +1518,9 @@ class selenium(object):
         have the option of using them. Note that this only influences xpath
         evaluation when using the ajaxslt engine (i.e. not "javascript-xpath").
         
-        'ignore' is boolean, true means we'll ignore attributes without value                        at the expense of xpath "correctness"; false means                        we'll sacrifice speed for correctness.
+        'ignore' is boolean, true means we'll ignore attributes without value \
+        at the expense of xpath "correctness"; false means \
+        we'll sacrifice speed for correctness.
         """
         self.do_command("ignoreAttributesWithoutValue", [ignore,])
     
@@ -1618,7 +1618,10 @@ class selenium(object):
         under test, unless you specified a path for this cookie explicitly.
         
         'nameValuePair' is name and value of the cookie in a format "name=value"
-        'optionsString' is options for the cookie. Currently supported options include 'path', 'max_age' and 'domain'.      the optionsString's format is "path=/path/, max_age=60, domain=.foo.com". The order of options are irrelevant, the unit      of the value of 'max_age' is second.  Note that specifying a domain that isn't a subset of the current domain will      usually fail.
+        'optionsString' is options for the cookie. Currently supported options include 'path', 'max_age' and 'domain'. \
+        the optionsString's format is "path=/path/, max_age=60, domain=.foo.com". The order of options are irrelevant, the unit \
+        of the value of 'max_age' is second.  Note that specifying a domain that isn't a subset of the current domain will
+        usually fail.
         """
         self.do_command("createCookie", [nameValuePair,optionsString,])
     
@@ -1636,7 +1639,10 @@ class selenium(object):
         name and m is the number of slashes in the path.
         
         'name' is the name of the cookie to be deleted
-        'optionsString' is options for the cookie. Currently supported options include 'path', 'domain'      and 'recurse.' The optionsString's format is "path=/path/, domain=.foo.com, recurse=true".      The order of options are irrelevant. Note that specifying a domain that isn't a subset of      the current domain will usually fail.
+        'optionsString' is options for the cookie. Currently supported options include 'path', 'domain' \
+        and 'recurse.' The optionsString's format is "path=/path/, domain=.foo.com, recurse=true". \
+        The order of options are irrelevant. Note that specifying a domain that isn't a subset of \
+        the current domain will usually fail.
         """
         self.do_command("deleteCookie", [name,optionsString,])
     
