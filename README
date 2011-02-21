@@ -1,6 +1,8 @@
 Whats different?
+2/2011: Added:
+Implicit waits for all functions that take a locator. Selenium will now wait for the element to be present for 60 seconds before performing the action.
 
-Added:
+1/2011 - Added:
 wait_for_element()
 wait_for_element_to_disappear()
 wait_until()
