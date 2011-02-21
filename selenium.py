@@ -12,6 +12,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Modified by Anthony Long, 2011.
 """
 __docformat__ = "restructuredtext en"
 
@@ -19,158 +21,7 @@ import httplib
 import urllib
 import time
 
-class selenium:
-    """
-    Defines an object that runs Selenium commands.
-    
-    Element Locators
-    ~~~~~~~~~~~~~~~~
-    
-    Element Locators tell Selenium which HTML element a command refers to.
-    The format of a locator is:
-    
-    \ *locatorType*\ **=**\ \ *argument*
-    
-    
-    We support the following strategies for locating elements:
-    
-    
-    *   \ **identifier**\ =\ *id*:
-        Select the element with the specified @id attribute. If no match is
-        found, select the first element whose @name attribute is \ *id*.
-        (This is normally the default; see below.)
-    *   \ **id**\ =\ *id*:
-        Select the element with the specified @id attribute.
-    *   \ **name**\ =\ *name*:
-        Select the first element with the specified @name attribute.
-        
-        *   username
-        *   name=username
-        
-        
-        The name may optionally be followed by one or more \ *element-filters*, separated from the name by whitespace.  If the \ *filterType* is not specified, \ **value**\  is assumed.
-        
-        *   name=flavour value=chocolate
-        
-    
-    *   \ **dom**\ =\ *javascriptExpression*:
-        
-        Find an element by evaluating the specified string.  This allows you to traverse the HTML Document Object
-        Model using JavaScript.  Note that you must not return a value in this string; simply make it the last expression in the block.
-        
-        *   dom=document.forms['myForm'].myDropdown
-        *   dom=document.images[56]
-        *   dom=function foo() { return document.links[1]; }; foo();
-        
-    
-    *   \ **xpath**\ =\ *xpathExpression*:
-        Locate an element using an XPath expression.
-        
-        *   xpath=//img[@alt='The image alt text']
-        *   xpath=//table[@id='table1']//tr[4]/td[2]
-        *   xpath=//a[contains(@href,'#id1')]
-        *   xpath=//a[contains(@href,'#id1')]/@class
-        *   xpath=(//table[@class='stylee'])//th[text()='theHeaderText']/../td
-        *   xpath=//input[@name='name2' and @value='yes']
-        *   xpath=//\*[text()="right"]
-        
-    
-    *   \ **link**\ =\ *textPattern*:
-        Select the link (anchor) element which contains text matching the
-        specified \ *pattern*.
-        
-        *   link=The link text
-        
-    
-    *   \ **css**\ =\ *cssSelectorSyntax*:
-        Select the element using css selectors. Please refer to CSS2 selectors, CSS3 selectors for more information. You can also check the TestCssLocators test in the selenium test suite for an example of usage, which is included in the downloaded selenium core package.
-        
-        *   css=a[href="#id3"]
-        *   css=span#firstChild + span
-        
-        
-        Currently the css selector locator supports all css1, css2 and css3 selectors except namespace in css3, some pseudo classes(:nth-of-type, :nth-last-of-type, :first-of-type, :last-of-type, :only-of-type, :visited, :hover, :active, :focus, :indeterminate) and pseudo elements(::first-line, ::first-letter, ::selection, ::before, ::after).
-    
-    *   \ **ui**\ =\ *uiSpecifierString*:
-        Locate an element by resolving the UI specifier string to another locator, and evaluating it. See the Selenium UI-Element Reference for more details.
-        
-        *   ui=loginPages::loginButton()
-        *   ui=settingsPages::toggle(label=Hide Email)
-        *   ui=forumPages::postBody(index=2)//a[2]
-        
-    
-    
-    
-    
-    Without an explicit locator prefix, Selenium uses the following default
-    strategies:
-    
-    
-    *   \ **dom**\ , for locators starting with "document."
-    *   \ **xpath**\ , for locators starting with "//"
-    *   \ **identifier**\ , otherwise
-    
-    Element Filters
-    ~~~~~~~~~~~~~~~
-    
-    Element filters can be used with a locator to refine a list of candidate elements.  They are currently used only in the 'name' element-locator.
-    
-    Filters look much like locators, ie.
-    
-    \ *filterType*\ **=**\ \ *argument*
-    
-    Supported element-filters are:
-    
-    \ **value=**\ \ *valuePattern*
-    
-    
-    Matches elements based on their values.  This is particularly useful for refining a list of similarly-named toggle-buttons.
-    
-    \ **index=**\ \ *index*
-    
-    
-    Selects a single element based on its position in the list (offset from zero).
-    
-    String-match Patterns
-    ~~~~~~~~~~~~~~~~~~~~~
-    
-    Various Pattern syntaxes are available for matching string values:
-    
-    
-    *   \ **glob:**\ \ *pattern*:
-        Match a string against a "glob" (aka "wildmat") pattern. "Glob" is a
-        kind of limited regular-expression syntax typically used in command-line
-        shells. In a glob pattern, "\*" represents any sequence of characters, and "?"
-        represents any single character. Glob patterns match against the entire
-        string.
-    *   \ **regexp:**\ \ *regexp*:
-        Match a string using a regular-expression. The full power of JavaScript
-        regular-expressions is available.
-    *   \ **regexpi:**\ \ *regexpi*:
-        Match a string using a case-insensitive regular-expression.
-    *   \ **exact:**\ \ *string*:
-        
-        Match a string exactly, verbatim, without any of that fancy wildcard
-        stuff.
-    
-    
-    
-    If no pattern prefix is specified, Selenium assumes that it's a "glob"
-    pattern.
-    
-    
-    
-    For commands that return multiple values (such as verifySelectOptions),
-    the string being matched is a comma-separated list of the return values,
-    where both commas and backslashes in the values are backslash-escaped.
-    When providing a pattern, the optional matching syntax (i.e. glob,
-    regexp, etc.) is specified once, as usual, at the beginning of the
-    pattern.
-    
-    
-    """
-
-### This part is hard-coded in the XSL
+class selenium(object):
     def __init__(self, host, port, browserStartCommand, browserURL):
         self.host = host
         self.port = port
@@ -244,12 +95,10 @@ class selenium:
         return tokens
     
     def get_number(self, verb, args):
-        # FIXME: Talk to the group about this, it should return a number
-        return self.get_string(verb, args)
+        return int(self.get_string(verb, args))
     
     def get_number_array(self, verb, args):
-        # FIXME: Talk to the group about this, it should return a number
-        return self.get_string_array(verb, args)
+        return int(self.get_string_array(verb, args))
     
     def get_boolean(self, verb, args):
         boolstr = self.get_string(verb, args)
@@ -271,8 +120,6 @@ class selenium:
             raise ValueError("result is neither 'true' nor 'false': " + boolarr[i])
         return boolarr
     
-
-    
     def click(self, locator):
         """
         Clicks on a link, button, checkbox or radio button. If the click action
@@ -281,8 +128,8 @@ class selenium:
         
         'locator' is an element locator
         """
-        self.do_command("click", [locator, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("click", [locator, ])
     
     def double_click(self, locator):
         """
@@ -292,8 +139,8 @@ class selenium:
         
         'locator' is an element locator
         """
-        self.do_command("doubleClick", [locator, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("doubleClick", [locator, ])
     
     def context_menu(self, locator):
         """
@@ -301,8 +148,8 @@ class selenium:
         
         'locator' is an element locator
         """
-        self.do_command("contextMenu", [locator, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("contextMenu", [locator, ])
     
     def click_at(self, locator, coordString):
         """
@@ -313,8 +160,8 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("clickAt", [locator, coordString, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("clickAt", [locator, coordString, ])
     
     def double_click_at(self, locator, coordString):
         """
@@ -325,8 +172,8 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("doubleClickAt", [locator, coordString, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("doubleClickAt", [locator, coordString, ])
     
     def context_menu_at(self, locator, coordString):
         """
@@ -335,8 +182,8 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("contextMenuAt", [locator, coordString, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("contextMenuAt", [locator, coordString, ])
     
     def fire_event(self, locator, eventName):
         """
@@ -346,8 +193,8 @@ class selenium:
         'locator' is an element locator
         'eventName' is the event name, e.g. "focus" or "blur"
         """
-        self.do_command("fireEvent", [locator, eventName, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("fireEvent", [locator, eventName, ])
     
     def focus(self, locator):
         """
@@ -355,8 +202,8 @@ class selenium:
         
         'locator' is an element locator
         """
-        self.do_command("focus", [locator, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("focus", [locator, ])
     
     def key_press(self, locator, keySequence):
         """
@@ -365,8 +212,8 @@ class selenium:
         'locator' is an element locator
         'keySequence' is Either be a string("\" followed by the numeric keycode  of the key to be pressed, normally the ASCII value of that key), or a single  character. For example: "w", "\119".
         """
-        self.do_command("keyPress", [locator, keySequence, ])
-
+        if self.wait_for_element(locator):
+            self.do_command("keyPress", [locator, keySequence, ])
     
     def shift_key_down(self):
         """
@@ -374,7 +221,6 @@ class selenium:
         
         """
         self.do_command("shiftKeyDown", [])
-
     
     def shift_key_up(self):
         """
@@ -382,7 +228,6 @@ class selenium:
         
         """
         self.do_command("shiftKeyUp", [])
-
     
     def meta_key_down(self):
         """
@@ -390,7 +235,6 @@ class selenium:
         
         """
         self.do_command("metaKeyDown", [])
-
     
     def meta_key_up(self):
         """
@@ -398,7 +242,6 @@ class selenium:
         
         """
         self.do_command("metaKeyUp", [])
-
     
     def alt_key_down(self):
         """
@@ -406,7 +249,6 @@ class selenium:
         
         """
         self.do_command("altKeyDown", [])
-
     
     def alt_key_up(self):
         """
@@ -414,7 +256,6 @@ class selenium:
         
         """
         self.do_command("altKeyUp", [])
-
     
     def control_key_down(self):
         """
@@ -422,7 +263,6 @@ class selenium:
         
         """
         self.do_command("controlKeyDown", [])
-
     
     def control_key_up(self):
         """
@@ -430,67 +270,66 @@ class selenium:
         
         """
         self.do_command("controlKeyUp", [])
-
     
-    def key_down(self,locator,keySequence):
+    def key_down(self, locator, keySequence):
         """
         Simulates a user pressing a key (without releasing it yet).
         
         'locator' is an element locator
         'keySequence' is Either be a string("\" followed by the numeric keycode  of the key to be pressed, normally the ASCII value of that key), or a single  character. For example: "w", "\119".
         """
-        self.do_command("keyDown", [locator,keySequence,])
-
+        if self.wait_for_element(locator):
+            self.do_command("keyDown", [locator,keySequence,])
     
-    def key_up(self,locator,keySequence):
+    def key_up(self, locator, keySequence):
         """
         Simulates a user releasing a key.
         
         'locator' is an element locator
         'keySequence' is Either be a string("\" followed by the numeric keycode  of the key to be pressed, normally the ASCII value of that key), or a single  character. For example: "w", "\119".
         """
-        self.do_command("keyUp", [locator,keySequence,])
-
+        if self.wait_for_element(locator):
+            self.do_command("keyUp", [locator,keySequence,])
     
-    def mouse_over(self,locator):
+    def mouse_over(self, locator):
         """
         Simulates a user hovering a mouse over the specified element.
         
         'locator' is an element locator
         """
-        self.do_command("mouseOver", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseOver", [locator,])
     
-    def mouse_out(self,locator):
+    def mouse_out(self, locator):
         """
         Simulates a user moving the mouse pointer away from the specified element.
         
         'locator' is an element locator
         """
-        self.do_command("mouseOut", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseOut", [locator,])
     
-    def mouse_down(self,locator):
+    def mouse_down(self, locator):
         """
         Simulates a user pressing the left mouse button (without releasing it yet) on
         the specified element.
         
         'locator' is an element locator
         """
-        self.do_command("mouseDown", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseDown", [locator,])
     
-    def mouse_down_right(self,locator):
+    def mouse_down_right(self, locator):
         """
         Simulates a user pressing the right mouse button (without releasing it yet) on
         the specified element.
         
         'locator' is an element locator
         """
-        self.do_command("mouseDownRight", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseDownRight", [locator,])
     
-    def mouse_down_at(self,locator,coordString):
+    def mouse_down_at(self, locator, coordString):
         """
         Simulates a user pressing the left mouse button (without releasing it yet) at
         the specified location.
@@ -498,10 +337,10 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("mouseDownAt", [locator,coordString,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseDownAt", [locator,coordString,])
     
-    def mouse_down_right_at(self,locator,coordString):
+    def mouse_down_right_at(self, locator, coordString):
         """
         Simulates a user pressing the right mouse button (without releasing it yet) at
         the specified location.
@@ -509,30 +348,30 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("mouseDownRightAt", [locator,coordString,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseDownRightAt", [locator,coordString,])
     
-    def mouse_up(self,locator):
+    def mouse_up(self, locator):
         """
         Simulates the event that occurs when the user releases the mouse button (i.e., stops
         holding the button down) on the specified element.
         
         'locator' is an element locator
         """
-        self.do_command("mouseUp", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseUp", [locator,])
     
-    def mouse_up_right(self,locator):
+    def mouse_up_right(self, locator):
         """
         Simulates the event that occurs when the user releases the right mouse button (i.e., stops
         holding the button down) on the specified element.
         
         'locator' is an element locator
         """
-        self.do_command("mouseUpRight", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseUpRight", [locator,])
     
-    def mouse_up_at(self,locator,coordString):
+    def mouse_up_at(self, locator, coordString):
         """
         Simulates the event that occurs when the user releases the mouse button (i.e., stops
         holding the button down) at the specified location.
@@ -540,10 +379,10 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("mouseUpAt", [locator,coordString,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseUpAt", [locator,coordString,])
     
-    def mouse_up_right_at(self,locator,coordString):
+    def mouse_up_right_at(self, locator, coordString):
         """
         Simulates the event that occurs when the user releases the right mouse button (i.e., stops
         holding the button down) at the specified location.
@@ -551,20 +390,20 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("mouseUpRightAt", [locator,coordString,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseUpRightAt", [locator,coordString,])
     
-    def mouse_move(self,locator):
+    def mouse_move(self, locator):
         """
         Simulates a user pressing the mouse button (without releasing it yet) on
         the specified element.
         
         'locator' is an element locator
         """
-        self.do_command("mouseMove", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseMove", [locator,])
     
-    def mouse_move_at(self,locator,coordString):
+    def mouse_move_at(self, locator, coordString):
         """
         Simulates a user pressing the mouse button (without releasing it yet) on
         the specified element.
@@ -572,10 +411,10 @@ class selenium:
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
         """
-        self.do_command("mouseMoveAt", [locator,coordString,])
-
+        if self.wait_for_element(locator):
+            self.do_command("mouseMoveAt", [locator,coordString,])
     
-    def type(self,locator,value):
+    def type(self, locator, value):
         """
         Sets the value of an input field, as though you typed it in.
         
@@ -587,10 +426,10 @@ class selenium:
         'locator' is an element locator
         'value' is the value to type
         """
-        self.do_command("type", [locator,value,])
-
+        if self.wait_for_element(locator):
+            self.do_command("type", [locator,value,])
     
-    def type_keys(self,locator,value):
+    def type_keys(self, locator, value):
         """
         Simulates keystroke events on the specified element, as though you typed the value key-by-key.
         
@@ -610,10 +449,10 @@ class selenium:
         'locator' is an element locator
         'value' is the value to type
         """
-        self.do_command("typeKeys", [locator,value,])
-
+        if self.wait_for_element(locator):
+            self.do_command("typeKeys", [locator,value,])
     
-    def set_speed(self,value):
+    def set_speed(self, value):
         """
         Set execution speed (i.e., set the millisecond length of a delay which will follow each selenium operation).  By default, there is no such delay, i.e.,
         the delay is 0 milliseconds.
@@ -621,7 +460,6 @@ class selenium:
         'value' is the number of milliseconds to pause after operation
         """
         self.do_command("setSpeed", [value,])
-
     
     def get_speed(self):
         """
@@ -639,27 +477,26 @@ class selenium:
         
         """
         return self.get_string("getLog", [])
-
     
-    def check(self,locator):
+    def check(self, locator):
         """
         Check a toggle-button (checkbox/radio)
         
         'locator' is an element locator
         """
-        self.do_command("check", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("check", [locator,])
     
-    def uncheck(self,locator):
+    def uncheck(self, locator):
         """
         Uncheck a toggle-button (checkbox/radio)
         
         'locator' is an element locator
         """
-        self.do_command("uncheck", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("uncheck", [locator,])
     
-    def select(self,selectLocator,optionLocator):
+    def select(self, selectLocator, optionLocator):
         """
         Select an option from a drop-down using an option locator.
         
@@ -676,26 +513,26 @@ class selenium:
             is the default.)
             
             *   label=regexp:^[Oo]ther
-            
+        
         
         *   \ **value**\ =\ *valuePattern*:
             matches options based on their values.
             
             *   value=other
-            
+        
         
         *   \ **id**\ =\ *id*:
             
             matches options based on their ids.
             
             *   id=option1
-            
+        
         
         *   \ **index**\ =\ *index*:
             matches an option based on its index (offset from zero).
             
             *   index=2
-            
+        
         
         
         
@@ -707,10 +544,10 @@ class selenium:
         'selectLocator' is an element locator identifying a drop-down menu
         'optionLocator' is an option locator (a label by default)
         """
-        self.do_command("select", [selectLocator,optionLocator,])
-
+        if self.wait_for_element(selectLocator):
+            self.do_command("select", [selectLocator,optionLocator,])
     
-    def add_selection(self,locator,optionLocator):
+    def add_selection(self, locator, optionLocator):
         """
         Add a selection to the set of selected options in a multi-select element using an option locator.
         
@@ -719,10 +556,10 @@ class selenium:
         'locator' is an element locator identifying a multi-select box
         'optionLocator' is an option locator (a label by default)
         """
-        self.do_command("addSelection", [locator,optionLocator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("addSelection", [locator,optionLocator,])
     
-    def remove_selection(self,locator,optionLocator):
+    def remove_selection(self, locator, optionLocator):
         """
         Remove a selection from the set of selected options in a multi-select element using an option locator.
         
@@ -731,19 +568,19 @@ class selenium:
         'locator' is an element locator identifying a multi-select box
         'optionLocator' is an option locator (a label by default)
         """
-        self.do_command("removeSelection", [locator,optionLocator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("removeSelection", [locator,optionLocator,])
     
-    def remove_all_selections(self,locator):
+    def remove_all_selections(self, locator):
         """
         Unselects all of the selected options in a multi-select element.
         
         'locator' is an element locator identifying a multi-select box
         """
-        self.do_command("removeAllSelections", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("removeAllSelections", [locator,])
     
-    def submit(self,formLocator):
+    def submit(self, formLocator):
         """
         Submit the specified form. This is particularly useful for forms without
         submit buttons, e.g. single-input "Search" forms.
@@ -752,7 +589,7 @@ class selenium:
         """
         self.do_command("submit", [formLocator,])
     
-    def open(self,url,ignoreResponseCode=False):
+    def open(self, url, ignoreResponseCode=False):
         """
         Opens an URL in the test frame. This accepts both relative and absolute
         URLs.
@@ -769,9 +606,8 @@ class selenium:
         'ignoreResponseCode' if set to true: doesnt send ajax HEAD/GET request; if set to false: sends ajax HEAD/GET request to the url and reports error code if any as response to open.
         """
         self.do_command("open", [url,ignoreResponseCode])
-
     
-    def open_window(self,url,windowID):
+    def open_window(self, url, windowID):
         """
         Opens a popup window (if a window with that ID isn't already open).
         After opening the window, you'll need to select it using the selectWindow
@@ -787,9 +623,8 @@ class selenium:
         'windowID' is the JavaScript window ID of the window to select
         """
         self.do_command("openWindow", [url,windowID,])
-
     
-    def select_window(self,windowID):
+    def select_window(self, windowID):
         """
         Selects a popup window using a window locator; once a popup window has been selected, all
         commands go to that window. To select the main window again, use null
@@ -846,9 +681,8 @@ class selenium:
         'windowID' is the JavaScript window ID of the window to select
         """
         self.do_command("selectWindow", [windowID,])
-
     
-    def select_pop_up(self,windowID):
+    def select_pop_up(self, windowID):
         """
         Simplifies the process of selecting a popup window (and does not offer
         functionality beyond what ``selectWindow()`` already provides).
@@ -870,7 +704,6 @@ class selenium:
         'windowID' is an identifier for the popup window, which can take on a                  number of different meanings
         """
         self.do_command("selectPopUp", [windowID,])
-
     
     def deselect_pop_up(self):
         """
@@ -880,9 +713,8 @@ class selenium:
         
         """
         self.do_command("deselectPopUp", [])
-
     
-    def select_frame(self,locator):
+    def select_frame(self, locator):
         """
         Selects a frame within the current window.  (You may invoke this command
         multiple times to select nested frames.)  To select the parent frame, use
@@ -897,10 +729,10 @@ class selenium:
         
         'locator' is an element locator identifying a frame or iframe
         """
-        self.do_command("selectFrame", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("selectFrame", [locator,])
     
-    def get_whether_this_frame_match_frame_expression(self,currentFrameString,target):
+    def get_whether_this_frame_match_frame_expression(self, currentFrameString,target):
         """
         Determine whether current/locator identify the frame containing this running code.
         
@@ -916,9 +748,8 @@ class selenium:
         'target' is new frame (which might be relative to the current one)
         """
         return self.get_boolean("getWhetherThisFrameMatchFrameExpression", [currentFrameString,target,])
-
     
-    def get_whether_this_window_match_window_expression(self,currentWindowString,target):
+    def get_whether_this_window_match_window_expression(self, currentWindowString,target):
         """
         Determine whether currentWindowString plus target identify the window containing this running code.
         
@@ -934,9 +765,8 @@ class selenium:
         'target' is new window (which might be relative to the current one, e.g., "_parent")
         """
         return self.get_boolean("getWhetherThisWindowMatchWindowExpression", [currentWindowString,target,])
-
     
-    def wait_for_pop_up(self,windowID,timeout):
+    def wait_for_pop_up(self, windowID, timeout):
         """
         Waits for a popup window to appear and load up.
         
@@ -944,7 +774,6 @@ class selenium:
         'timeout' is a timeout in milliseconds, after which the action will return with an error.                If this value is not specified, the default Selenium                timeout will be used. See the setTimeout() command.
         """
         self.do_command("waitForPopUp", [windowID,timeout,])
-
     
     def choose_cancel_on_next_confirmation(self):
         """
@@ -968,7 +797,6 @@ class selenium:
         
         """
         self.do_command("chooseCancelOnNextConfirmation", [])
-
     
     def choose_ok_on_next_confirmation(self):
         """
@@ -993,9 +821,8 @@ class selenium:
         
         """
         self.do_command("chooseOkOnNextConfirmation", [])
-
     
-    def answer_on_next_prompt(self,answer):
+    def answer_on_next_prompt(self, answer):
         """
         Instructs Selenium to return the specified answer string in response to
         the next JavaScript prompt [window.prompt()].
@@ -1003,7 +830,6 @@ class selenium:
         'answer' is the answer to give in response to the prompt pop-up
         """
         self.do_command("answerOnNextPrompt", [answer,])
-
     
     def go_back(self):
         """
@@ -1011,7 +837,6 @@ class selenium:
         
         """
         self.do_command("goBack", [])
-
     
     def refresh(self):
         """
@@ -1019,7 +844,6 @@ class selenium:
         
         """
         self.do_command("refresh", [])
-
     
     def close(self):
         """
@@ -1028,7 +852,6 @@ class selenium:
         
         """
         self.do_command("close", [])
-
     
     def is_alert_present(self):
         """
@@ -1042,7 +865,6 @@ class selenium:
         
         """
         return self.get_boolean("isAlertPresent", [])
-
     
     def is_prompt_present(self):
         """
@@ -1056,7 +878,6 @@ class selenium:
         
         """
         return self.get_boolean("isPromptPresent", [])
-
     
     def is_confirmation_present(self):
         """
@@ -1070,7 +891,6 @@ class selenium:
         
         """
         return self.get_boolean("isConfirmationPresent", [])
-
     
     def get_alert(self):
         """
@@ -1091,7 +911,6 @@ class selenium:
         
         """
         return self.get_string("getAlert", [])
-
     
     def get_confirmation(self):
         """
@@ -1125,7 +944,6 @@ class selenium:
         
         """
         return self.get_string("getConfirmation", [])
-
     
     def get_prompt(self):
         """
@@ -1147,7 +965,6 @@ class selenium:
         
         """
         return self.get_string("getPrompt", [])
-
     
     def get_location(self):
         """
@@ -1155,7 +972,6 @@ class selenium:
         
         """
         return self.get_string("getLocation", [])
-
     
     def get_title(self):
         """
@@ -1163,7 +979,6 @@ class selenium:
         
         """
         return self.get_string("getTitle", [])
-
     
     def get_body_text(self):
         """
@@ -1171,9 +986,8 @@ class selenium:
         
         """
         return self.get_string("getBodyText", [])
-
     
-    def get_value(self,locator):
+    def get_value(self, locator):
         """
         Gets the (whitespace-trimmed) value of an input field (or anything else with a value parameter).
         For checkbox/radio elements, the value will be "on" or "off" depending on
@@ -1181,10 +995,10 @@ class selenium:
         
         'locator' is an element locator
         """
-        return self.get_string("getValue", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_string("getValue", [locator,])
     
-    def get_text(self,locator):
+    def get_text(self, locator):
         """
         Gets the text of an element. This works for any element that contains
         text. This command uses either the textContent (Mozilla-like browsers) or
@@ -1193,19 +1007,19 @@ class selenium:
         
         'locator' is an element locator
         """
-        return str(self.get_string("getText", [locator,]))
-
+        if self.wait_for_element(locator):
+            return str(self.get_string("getText", [locator,]))
     
-    def highlight(self,locator):
+    def highlight(self, locator):
         """
         Briefly changes the backgroundColor of the specified element yellow.  Useful for debugging.
         
         'locator' is an element locator
         """
-        self.do_command("highlight", [locator,])
-
+        if self.wait_for_element(locator):
+            self.do_command("highlight", [locator,])
     
-    def get_eval(self,script):
+    def get_eval(self, script):
         """
         Gets the result of evaluating the specified JavaScript snippet.  The snippet may
         have multiple lines, but only the result of the last line will be returned.
@@ -1223,18 +1037,17 @@ class selenium:
         'script' is the JavaScript snippet to run
         """
         return self.get_string("getEval", [script,])
-
     
-    def is_checked(self,locator):
+    def is_checked(self, locator):
         """
         Gets whether a toggle-button (checkbox/radio) is checked.  Fails if the specified element doesn't exist or isn't a toggle-button.
         
         'locator' is an element locator pointing to a checkbox or radio button
         """
-        return self.get_boolean("isChecked", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_boolean("isChecked", [locator,])
     
-    def get_table(self,tableCellAddress):
+    def get_table(self, tableCellAddress):
         """
         Gets the text from a cell of a table. The cellAddress syntax
         tableLocator.row.column, where row and column start at 0.
@@ -1242,99 +1055,98 @@ class selenium:
         'tableCellAddress' is a cell address, e.g. "foo.1.4"
         """
         return self.get_string("getTable", [tableCellAddress,])
-
     
-    def get_selected_labels(self,selectLocator):
+    def get_selected_labels(self, selectLocator):
         """
         Gets all option labels (visible text) for selected options in the specified select or multi-select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string_array("getSelectedLabels", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string_array("getSelectedLabels", [selectLocator,])
     
-    def get_selected_label(self,selectLocator):
+    def get_selected_label(self, selectLocator):
         """
         Gets option label (visible text) for selected option in the specified select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string("getSelectedLabel", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string("getSelectedLabel", [selectLocator,])
     
-    def get_selected_values(self,selectLocator):
+    def get_selected_values(self, selectLocator):
         """
         Gets all option values (value attributes) for selected options in the specified select or multi-select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string_array("getSelectedValues", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string_array("getSelectedValues", [selectLocator,])
     
-    def get_selected_value(self,selectLocator):
+    def get_selected_value(self, selectLocator):
         """
         Gets option value (value attribute) for selected option in the specified select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string("getSelectedValue", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string("getSelectedValue", [selectLocator,])
     
-    def get_selected_indexes(self,selectLocator):
+    def get_selected_indexes(self, selectLocator):
         """
         Gets all option indexes (option number, starting at 0) for selected options in the specified select or multi-select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string_array("getSelectedIndexes", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string_array("getSelectedIndexes", [selectLocator,])
     
-    def get_selected_index(self,selectLocator):
+    def get_selected_index(self, selectLocator):
         """
         Gets option index (option number, starting at 0) for selected option in the specified select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string("getSelectedIndex", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string("getSelectedIndex", [selectLocator,])
     
-    def get_selected_ids(self,selectLocator):
+    def get_selected_ids(self, selectLocator):
         """
         Gets all option element IDs for selected options in the specified select or multi-select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string_array("getSelectedIds", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string_array("getSelectedIds", [selectLocator,])
     
-    def get_selected_id(self,selectLocator):
+    def get_selected_id(self, selectLocator):
         """
         Gets option element ID for selected option in the specified select element.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string("getSelectedId", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string("getSelectedId", [selectLocator,])
     
-    def is_something_selected(self,selectLocator):
+    def is_something_selected(self, selectLocator):
         """
         Determines whether some option in a drop-down menu is selected.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_boolean("isSomethingSelected", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_boolean("isSomethingSelected", [selectLocator,])
     
-    def get_select_options(self,selectLocator):
+    def get_select_options(self, selectLocator):
         """
         Gets all option labels in the specified select drop-down.
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        return self.get_string_array("getSelectOptions", [selectLocator,])
-
+        if self.wait_for_element(selectLocator):
+            return self.get_string_array("getSelectOptions", [selectLocator,])
     
-    def get_attribute(self,attributeLocator):
+    def get_attribute(self, attributeLocator):
         """
         Gets the value of an element attribute. The value of the attribute may
         differ across browsers (this is the case for the "style" attribute, for
@@ -1342,19 +1154,18 @@ class selenium:
         
         'attributeLocator' is an element locator followed by an @ sign and then the name of the attribute, e.g. "foo@bar"
         """
-        return self.get_string("getAttribute", [attributeLocator,])
-
+        if self.wait_for_element(attributeLocator):
+            return self.get_string("getAttribute", [attributeLocator,])
     
-    def is_text_present(self,pattern):
+    def is_text_present(self, pattern):
         """
         Verifies that the specified text pattern appears somewhere on the rendered page shown to the user.
         
         'pattern' is a pattern to match with the text of the page
         """
         return self.get_boolean("isTextPresent", [pattern,])
-
     
-    def is_element_present(self,locator):
+    def is_element_present(self, locator):
         """
         Verifies that the specified element is somewhere on the page.
         
@@ -1367,7 +1178,7 @@ class selenium:
             try:
                 if self.is_element_present(locator): break
             except: pass
-            time.sleep(.25)
+            time.sleep(1)
         else:
             raise ValueError('Your locator: %s was not found within %s seconds.' % (locator, wait_time))
     
@@ -1407,7 +1218,7 @@ class selenium:
         else:
             raise ValueError('Your locator: %s was not found within %s seconds.' % (locator, wait_time))
     
-    def is_visible(self,locator):
+    def is_visible(self, locator):
         """
         Determines if the specified element is visible. An
         element can be rendered invisible by setting the CSS "visibility"
@@ -1418,9 +1229,8 @@ class selenium:
         'locator' is an element locator
         """
         return self.get_boolean("isVisible", [locator,])
-
     
-    def is_editable(self,locator):
+    def is_editable(self, locator):
         """
         Determines whether the specified input element is editable, ie hasn't been disabled.
         This method will fail if the specified element isn't an input element.
@@ -1428,7 +1238,6 @@ class selenium:
         'locator' is an element locator
         """
         return self.get_boolean("isEditable", [locator,])
-
     
     def get_all_buttons(self):
         """
@@ -1440,7 +1249,6 @@ class selenium:
         
         """
         return self.get_string_array("getAllButtons", [])
-
     
     def get_all_links(self):
         """
@@ -1452,7 +1260,6 @@ class selenium:
         
         """
         return self.get_string_array("getAllLinks", [])
-
     
     def get_all_fields(self):
         """
@@ -1464,28 +1271,26 @@ class selenium:
         
         """
         return self.get_string_array("getAllFields", [])
-
     
-    def get_attribute_from_all_windows(self,attributeName):
+    def get_attribute_from_all_windows(self, attributeName):
         """
         Returns every instance of some attribute from all known windows.
         
         'attributeName' is name of an attribute on the windows
         """
         return self.get_string_array("getAttributeFromAllWindows", [attributeName,])
-
     
-    def dragdrop(self,locator,movementsString):
+    def dragdrop(self, locator, movementsString):
         """
         deprecated - use dragAndDrop instead
         
         'locator' is an element locator
         'movementsString' is offset in pixels from the current location to which the element should be moved, e.g., "+70,-300"
         """
-        self.do_command("dragdrop", [locator,movementsString,])
-
+        if self.wait_for_element(locator):
+            self.do_command("dragdrop", [locator,movementsString,])
     
-    def set_mouse_speed(self,pixels):
+    def set_mouse_speed(self, pixels):
         """
         Configure the number of pixels between "mousemove" events during dragAndDrop commands (default=10).
         
@@ -1500,7 +1305,6 @@ class selenium:
         'pixels' is the number of pixels between "mousemove" events
         """
         self.do_command("setMouseSpeed", [pixels,])
-
     
     def get_mouse_speed(self):
         """
@@ -1508,27 +1312,27 @@ class selenium:
         
         """
         return self.get_number("getMouseSpeed", [])
-
     
-    def drag_and_drop(self,locator,movementsString):
+    def drag_and_drop(self, locator, movementsString):
         """
         Drags an element a certain distance and then drops it
         
         'locator' is an element locator
         'movementsString' is offset in pixels from the current location to which the element should be moved, e.g., "+70,-300"
         """
-        self.do_command("dragAndDrop", [locator,movementsString,])
-
+        if self.wait_for_element(locator):
+            self.do_command("dragAndDrop", [locator,movementsString,])
     
-    def drag_and_drop_to_object(self,locatorOfObjectToBeDragged,locatorOfDragDestinationObject):
+    def drag_and_drop_to_object(self, locatorOfObjectToBeDragged, locatorOfDragDestinationObject):
         """
         Drags an element and drops it on another element
         
         'locatorOfObjectToBeDragged' is an element to be dragged
         'locatorOfDragDestinationObject' is an element whose location (i.e., whose center-most pixel) will be the point where locatorOfObjectToBeDragged  is dropped
         """
-        self.do_command("dragAndDropToObject", [locatorOfObjectToBeDragged,locatorOfDragDestinationObject,])
-
+        if self.wait_for_element(locatorOfObjectToBeDragged):
+            if self.wait_for_element(locatorOfDragDestinationObject):
+                self.do_command("dragAndDropToObject", [locatorOfObjectToBeDragged,locatorOfDragDestinationObject,])
     
     def window_focus(self):
         """
@@ -1536,7 +1340,6 @@ class selenium:
         
         """
         self.do_command("windowFocus", [])
-
     
     def window_maximize(self):
         """
@@ -1544,7 +1347,6 @@ class selenium:
         
         """
         self.do_command("windowMaximize", [])
-
     
     def get_all_window_ids(self):
         """
@@ -1552,7 +1354,6 @@ class selenium:
         
         """
         return self.get_string_array("getAllWindowIds", [])
-
     
     def get_all_window_names(self):
         """
@@ -1560,7 +1361,6 @@ class selenium:
         
         """
         return self.get_string_array("getAllWindowNames", [])
-
     
     def get_all_window_titles(self):
         """
@@ -1568,7 +1368,6 @@ class selenium:
         
         """
         return self.get_string_array("getAllWindowTitles", [])
-
     
     def get_html_source(self):
         """
@@ -1577,9 +1376,8 @@ class selenium:
         
         """
         return self.get_string("getHtmlSource", [])
-
     
-    def set_cursor_position(self,locator,position):
+    def set_cursor_position(self, locator, position):
         """
         Moves the text cursor to the specified position in the given input element or textarea.
         This method will fail if the specified element isn't an input element or textarea.
@@ -1587,20 +1385,20 @@ class selenium:
         'locator' is an element locator pointing to an input element or textarea
         'position' is the numerical position of the cursor in the field; position should be 0 to move the position to the beginning of the field.  You can also set the cursor to -1 to move it to the end of the field.
         """
-        self.do_command("setCursorPosition", [locator,position,])
-
+        if self.wait_for_element(locator):
+            self.do_command("setCursorPosition", [locator,position,])
     
-    def get_element_index(self,locator):
+    def get_element_index(self, locator):
         """
         Get the relative index of an element to its parent (starting from 0). The comment node and empty text node
         will be ignored.
         
         'locator' is an element locator pointing to an element
         """
-        return self.get_number("getElementIndex", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_number("getElementIndex", [locator,])
     
-    def is_ordered(self,locator1,locator2):
+    def is_ordered(self, locator1, locator2):
         """
         Check if these two elements have same parent and are ordered siblings in the DOM. Two same elements will
         not be considered ordered.
@@ -1608,46 +1406,47 @@ class selenium:
         'locator1' is an element locator pointing to the first element
         'locator2' is an element locator pointing to the second element
         """
-        return self.get_boolean("isOrdered", [locator1,locator2,])
-
+        if self.wait_for_element(locator1):
+            if self.wait_for_element(locator2):
+                return self.get_boolean("isOrdered", [locator1,locator2,])
     
-    def get_element_position_left(self,locator):
+    def get_element_position_left(self, locator):
         """
         Retrieves the horizontal position of an element
         
         'locator' is an element locator pointing to an element OR an element itself
         """
-        return self.get_number("getElementPositionLeft", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_number("getElementPositionLeft", [locator,])
     
-    def get_element_position_top(self,locator):
+    def get_element_position_top(self, locator):
         """
         Retrieves the vertical position of an element
         
         'locator' is an element locator pointing to an element OR an element itself
         """
-        return self.get_number("getElementPositionTop", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_number("getElementPositionTop", [locator,])
     
-    def get_element_width(self,locator):
+    def get_element_width(self, locator):
         """
         Retrieves the width of an element
         
         'locator' is an element locator pointing to an element
         """
-        return self.get_number("getElementWidth", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_number("getElementWidth", [locator,])
     
-    def get_element_height(self,locator):
+    def get_element_height(self, locator):
         """
         Retrieves the height of an element
         
         'locator' is an element locator pointing to an element
         """
-        return self.get_number("getElementHeight", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_number("getElementHeight", [locator,])
     
-    def get_cursor_position(self,locator):
+    def get_cursor_position(self, locator):
         """
         Retrieves the text cursor position in the given input element or textarea; beware, this may not work perfectly on all browsers.
         
@@ -1659,10 +1458,10 @@ class selenium:
         
         'locator' is an element locator pointing to an input element or textarea
         """
-        return self.get_number("getCursorPosition", [locator,])
-
+        if self.wait_for_element(locator):
+            return self.get_number("getCursorPosition", [locator,])
     
-    def get_expression(self,expression):
+    def get_expression(self, expression):
         """
         Returns the specified expression.
         
@@ -1674,9 +1473,8 @@ class selenium:
         'expression' is the value to return
         """
         return self.get_string("getExpression", [expression,])
-
     
-    def get_xpath_count(self,xpath):
+    def get_xpath_count(self, xpath):
         """
         Returns the number of nodes that match the specified xpath, eg. "//table" would give
         the number of tables.
@@ -1684,9 +1482,8 @@ class selenium:
         'xpath' is the xpath expression to evaluate. do NOT wrap this expression in a 'count()' function; we will do that for you.
         """
         return self.get_number("getXpathCount", [xpath,])
-
     
-    def assign_id(self,locator,identifier):
+    def assign_id(self, locator, identifier):
         """
         Temporarily sets the "id" attribute of the specified element, so you can locate it in the future
         using its ID rather than a slow/complicated XPath.  This ID will disappear once the page is
@@ -1695,10 +1492,10 @@ class selenium:
         'locator' is an element locator pointing to an element
         'identifier' is a string to be used as the ID of the specified element
         """
-        self.do_command("assignId", [locator,identifier,])
-
+        if self.wait_for_element(locator):
+            self.do_command("assignId", [locator,identifier,])
     
-    def allow_native_xpath(self,allow):
+    def allow_native_xpath(self, allow):
         """
         Specifies whether Selenium should use the native in-browser implementation
         of XPath (if any native version is available); if you pass "false" to
@@ -1710,9 +1507,8 @@ class selenium:
         'allow' is boolean, true means we'll prefer to use native XPath; false means we'll only use JS XPath
         """
         self.do_command("allowNativeXpath", [allow,])
-
     
-    def ignore_attributes_without_value(self,ignore):
+    def ignore_attributes_without_value(self, ignore):
         """
         Specifies whether Selenium will ignore xpath attributes that have no
         value, i.e. are the empty string, when using the non-native xpath
@@ -1727,9 +1523,8 @@ class selenium:
         'ignore' is boolean, true means we'll ignore attributes without value                        at the expense of xpath "correctness"; false means                        we'll sacrifice speed for correctness.
         """
         self.do_command("ignoreAttributesWithoutValue", [ignore,])
-
     
-    def wait_for_condition(self,script,timeout):
+    def wait_for_condition(self, script, timeout):
         """
         Runs the specified JavaScript snippet repeatedly until it evaluates to "true".
         The snippet may have multiple lines, but only the result of the last line
@@ -1746,9 +1541,8 @@ class selenium:
         'timeout' is a timeout in milliseconds, after which this command will return with an error
         """
         self.do_command("waitForCondition", [script,timeout,])
-
     
-    def set_timeout(self,timeout):
+    def set_timeout(self, timeout):
         """
         Specifies the amount of time that Selenium will wait for actions to complete.
         
@@ -1760,9 +1554,8 @@ class selenium:
         'timeout' is a timeout in milliseconds, after which the action will return with an error
         """
         self.do_command("setTimeout", [timeout,])
-
     
-    def wait_for_page_to_load(self,timeout):
+    def wait_for_page_to_load(self, timeout):
         """
         Waits for a new page to load.
         
@@ -1779,9 +1572,8 @@ class selenium:
         'timeout' is a timeout in milliseconds, after which this command will return with an error
         """
         self.do_command("waitForPageToLoad", [timeout,])
-
     
-    def wait_for_frame_to_load(self,frameAddress,timeout):
+    def wait_for_frame_to_load(self, frameAddress, timeout):
         """
         Waits for a new frame to load.
         
@@ -1796,7 +1588,6 @@ class selenium:
         'timeout' is a timeout in milliseconds, after which this command will return with an error
         """
         self.do_command("waitForFrameToLoad", [frameAddress,timeout,])
-
     
     def get_cookie(self):
         """
@@ -1804,27 +1595,24 @@ class selenium:
         
         """
         return self.get_string("getCookie", [])
-
     
-    def get_cookie_by_name(self,name):
+    def get_cookie_by_name(self, name):
         """
         Returns the value of the cookie with the specified name, or throws an error if the cookie is not present.
         
         'name' is the name of the cookie
         """
         return self.get_string("getCookieByName", [name,])
-
     
-    def is_cookie_present(self,name):
+    def is_cookie_present(self, name):
         """
         Returns true if a cookie with the specified name is present, or false otherwise.
         
         'name' is the name of the cookie
         """
         return self.get_boolean("isCookiePresent", [name,])
-
     
-    def create_cookie(self,nameValuePair,optionsString):
+    def create_cookie(self, nameValuePair, optionsString):
         """
         Create a new cookie whose path and domain are same with those of current page
         under test, unless you specified a path for this cookie explicitly.
@@ -1833,9 +1621,8 @@ class selenium:
         'optionsString' is options for the cookie. Currently supported options include 'path', 'max_age' and 'domain'.      the optionsString's format is "path=/path/, max_age=60, domain=.foo.com". The order of options are irrelevant, the unit      of the value of 'max_age' is second.  Note that specifying a domain that isn't a subset of the current domain will      usually fail.
         """
         self.do_command("createCookie", [nameValuePair,optionsString,])
-
     
-    def delete_cookie(self,name,optionsString):
+    def delete_cookie(self, name, optionsString):
         """
         Delete a named cookie with specified path and domain.  Be careful; to delete a cookie, you
         need to delete it using the exact same path and domain that were used to create the cookie.
@@ -1852,7 +1639,6 @@ class selenium:
         'optionsString' is options for the cookie. Currently supported options include 'path', 'domain'      and 'recurse.' The optionsString's format is "path=/path/, domain=.foo.com, recurse=true".      The order of options are irrelevant. Note that specifying a domain that isn't a subset of      the current domain will usually fail.
         """
         self.do_command("deleteCookie", [name,optionsString,])
-
     
     def delete_all_visible_cookies(self):
         """
@@ -1862,9 +1648,8 @@ class selenium:
         
         """
         self.do_command("deleteAllVisibleCookies", [])
-
     
-    def set_browser_log_level(self,logLevel):
+    def set_browser_log_level(self, logLevel):
         """
         Sets the threshold for browser-side logging messages; log messages beneath this threshold will be discarded.
         Valid logLevel strings are: "debug", "info", "warn", "error" or "off".
@@ -1874,9 +1659,8 @@ class selenium:
         'logLevel' is one of the following: "debug", "info", "warn", "error" or "off"
         """
         self.do_command("setBrowserLogLevel", [logLevel,])
-
     
-    def run_script(self,script):
+    def run_script(self, script):
         """
         Creates a new "script" tag in the body of the current test window, and
         adds the specified text into the body of the command.  Scripts run in
@@ -1889,9 +1673,8 @@ class selenium:
         'script' is the JavaScript snippet to run
         """
         self.do_command("runScript", [script,])
-
     
-    def add_location_strategy(self,strategyName,functionDefinition):
+    def add_location_strategy(self, strategyName, functionDefinition):
         """
         Defines a new function for Selenium to locate elements on the page.
         For example,
@@ -1913,9 +1696,8 @@ class selenium:
         'functionDefinition' is a string defining the body of a function in JavaScript.   For example: ``return inDocument.getElementById(locator);``
         """
         self.do_command("addLocationStrategy", [strategyName,functionDefinition,])
-
     
-    def capture_entire_page_screenshot(self,filename,kwargs):
+    def capture_entire_page_screenshot(self, filename, kwargs):
         """
         Saves the entire contents of the current window canvas to a PNG file.
         Contrast this with the captureScreenshot command, which captures the
@@ -1935,9 +1717,8 @@ class selenium:
         
         """
         self.do_command("captureEntirePageScreenshot", [filename,kwargs,])
-
     
-    def rollup(self,rollupName,kwargs):
+    def rollup(self, rollupName, kwargs):
         """
         Executes a command rollup, which is a series of commands with a unique
         name, and optionally arguments that control the generation of the set of
@@ -1948,9 +1729,8 @@ class selenium:
         'kwargs' is keyword arguments string that influences how the                    rollup expands into commands
         """
         self.do_command("rollup", [rollupName,kwargs,])
-
     
-    def add_script(self,scriptContent,scriptTagId):
+    def add_script(self, scriptContent, scriptTagId):
         """
         Loads script content into a new script tag in the Selenium document. This
         differs from the runScript command in that runScript adds the script tag
@@ -1968,9 +1748,8 @@ class selenium:
         'scriptTagId' is (optional) the id of the new script tag. If                       specified, and an element with this id already                       exists, this operation will fail.
         """
         self.do_command("addScript", [scriptContent,scriptTagId,])
-
     
-    def remove_script(self,scriptTagId):
+    def remove_script(self, scriptTagId):
         """
         Removes a script tag from the Selenium document identified by the given
         id. Does nothing if the referenced tag doesn't exist.
@@ -1978,9 +1757,8 @@ class selenium:
         'scriptTagId' is the id of the script element to remove.
         """
         self.do_command("removeScript", [scriptTagId,])
-
     
-    def use_xpath_library(self,libraryName):
+    def use_xpath_library(self, libraryName):
         """
         Allows choice of one of the available libraries.
         
@@ -1992,9 +1770,8 @@ class selenium:
          If libraryName isn't one of these three, then  no change will be made.
         """
         self.do_command("useXpathLibrary", [libraryName,])
-
     
-    def set_context(self,context):
+    def set_context(self, context):
         """
         Writes a message to the status bar and adds a note to the browser-side
         log.
@@ -2002,9 +1779,8 @@ class selenium:
         'context' is the message to be sent to the browser
         """
         self.do_command("setContext", [context,])
-
     
-    def attach_file(self,fieldLocator,fileLocator):
+    def attach_file(self, fieldLocator, fileLocator):
         """
         Sets a file input (upload) field to the file listed in fileLocator
         
@@ -2012,16 +1788,14 @@ class selenium:
         'fileLocator' is a URL pointing to the specified file. Before the file  can be set in the input field (fieldLocator), Selenium RC may need to transfer the file    to the local machine before attaching the file in a web page form. This is common in selenium  grid configurations where the RC server driving the browser is not the same  machine that started the test.   Supported Browsers: Firefox ("\*chrome") only.
         """
         self.do_command("attachFile", [fieldLocator,fileLocator,])
-
     
-    def capture_screenshot(self,filename):
+    def capture_screenshot(self, filename):
         """
         Captures a PNG screenshot to the specified file.
         
         'filename' is the absolute path to the file to be written, e.g. "c:\blah\screenshot.png"
         """
         self.do_command("captureScreenshot", [filename,])
-
     
     def capture_screenshot_to_string(self):
         """
@@ -2029,7 +1803,6 @@ class selenium:
         
         """
         return self.get_string("captureScreenshotToString", [])
-
     
     def captureNetworkTraffic(self, type):
         """
@@ -2048,7 +1821,7 @@ class selenium:
         """
         return self.do_command("addCustomRequestHeader", [key,value,])
     
-    def capture_entire_page_screenshot_to_string(self,kwargs):
+    def capture_entire_page_screenshot_to_string(self, kwargs):
         """
         Downloads a screenshot of the browser current window canvas to a
         based 64 encoded PNG file. The \ *entire* windows canvas is captured,
@@ -2059,7 +1832,6 @@ class selenium:
         'kwargs' is A kwargs string that modifies the way the screenshot is captured. Example: "background=#CCFFDD". This may be useful to set for capturing screenshots of less-than-ideal layouts, for example where absolute positioning causes the calculation of the canvas dimension to fail and a black background is exposed  (possibly obscuring black text).
         """
         return self.get_string("captureEntirePageScreenshotToString", [kwargs,])
-
     
     def shut_down_selenium_server(self):
         """
@@ -2070,7 +1842,6 @@ class selenium:
         
         """
         self.do_command("shutDownSeleniumServer", [])
-
     
     def retrieve_last_remote_control_logs(self):
         """
@@ -2080,9 +1851,8 @@ class selenium:
         
         """
         return self.get_string("retrieveLastRemoteControlLogs", [])
-
     
-    def key_down_native(self,keycode):
+    def key_down_native(self, keycode):
         """
         Simulates a user pressing a key (without releasing it yet) by sending a native operating system keystroke.
         This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
@@ -2093,9 +1863,8 @@ class selenium:
         'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
         """
         self.do_command("keyDownNative", [keycode,])
-
     
-    def key_up_native(self,keycode):
+    def key_up_native(self, keycode):
         """
         Simulates a user releasing a key by sending a native operating system keystroke.
         This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
@@ -2106,9 +1875,8 @@ class selenium:
         'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
         """
         self.do_command("keyUpNative", [keycode,])
-
     
-    def key_press_native(self,keycode):
+    def key_press_native(self, keycode):
         """
         Simulates a user pressing and releasing a key by sending a native operating system keystroke.
         This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
@@ -2119,3 +1887,4 @@ class selenium:
         'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
         """
         self.do_command("keyPressNative", [keycode,])
+    
