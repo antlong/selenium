@@ -905,8 +905,6 @@ class selenium(object):
         Selenium does NOT support JavaScript alerts that are generated in a
         page's onload() event handler. In this case a visible dialog WILL be
         generated and Selenium will hang until someone manually clicks OK.
-        
-        
         """
         return self.get_string("getAlert", [])
     
@@ -915,31 +913,20 @@ class selenium(object):
         Retrieves the message of a JavaScript confirmation dialog generated during
         the previous action.
         
-        
-        
         By default, the confirm function will return true, having the same effect
         as manually clicking OK. This can be changed by prior execution of the
         chooseCancelOnNextConfirmation command.
         
-        
-        
         If an confirmation is generated but you do not consume it with getConfirmation,
         the next Selenium action will fail.
         
-        
-        
         NOTE: under Selenium, JavaScript confirmations will NOT pop up a visible
         dialog.
-        
-        
         
         NOTE: Selenium does NOT support JavaScript confirmations that are
         generated in a page's onload() event handler. In this case a visible
         dialog WILL be generated and Selenium will hang until you manually click
         OK.
-        
-        
-        
         """
         return self.get_string("getConfirmation", [])
     
@@ -1069,8 +1056,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string("getSelectedLabel", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string("getSelectedLabel", [selectLocator,])
     
     def get_selected_values(self, selectLocator):
         """
@@ -1078,8 +1065,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string_array("getSelectedValues", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string_array("getSelectedValues", [selectLocator,])
     
     def get_selected_value(self, selectLocator):
         """
@@ -1087,8 +1074,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string("getSelectedValue", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string("getSelectedValue", [selectLocator,])
     
     def get_selected_indexes(self, selectLocator):
         """
@@ -1096,8 +1083,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string_array("getSelectedIndexes", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string_array("getSelectedIndexes", [selectLocator,])
     
     def get_selected_index(self, selectLocator):
         """
@@ -1105,8 +1092,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string("getSelectedIndex", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string("getSelectedIndex", [selectLocator,])
     
     def get_selected_ids(self, selectLocator):
         """
@@ -1114,8 +1101,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string_array("getSelectedIds", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string_array("getSelectedIds", [selectLocator,])
     
     def get_selected_id(self, selectLocator):
         """
@@ -1123,8 +1110,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string("getSelectedId", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string("getSelectedId", [selectLocator,])
     
     def is_something_selected(self, selectLocator):
         """
@@ -1132,8 +1119,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_boolean("isSomethingSelected", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_boolean("isSomethingSelected", [selectLocator,])
     
     def get_select_options(self, selectLocator):
         """
@@ -1141,8 +1128,8 @@ class selenium(object):
         
         'selectLocator' is an element locator identifying a drop-down menu
         """
-        if self.wait_for_element(selectLocator):
-            return self.get_string_array("getSelectOptions", [selectLocator,])
+        self.wait_for_element(selectLocator)
+        return self.get_string_array("getSelectOptions", [selectLocator,])
     
     def get_attribute(self, attributeLocator):
         """
@@ -1152,8 +1139,9 @@ class selenium(object):
         
         'attributeLocator' is an element locator followed by an @ sign and then the name of the attribute, e.g. "foo@bar"
         """
-        if self.wait_for_element(attributeLocator):
-            return self.get_string("getAttribute", [attributeLocator,])
+        locator = attributeLocator.split('/@')[0]
+        self.wait_for_element(locator)
+        return self.get_string("getAttribute", [attributeLocator,])
     
     def is_text_present(self, pattern):
         """
@@ -1185,7 +1173,7 @@ class selenium(object):
             try:
                 if not self.is_visible(locator): break
             except: pass
-            time.sleep(.25)
+            time.sleep(1)
         else:
             raise ValueError('Your locator: %s was not found within %s seconds.' % (locator, wait_time))
     
@@ -1194,7 +1182,7 @@ class selenium(object):
             try:
                 if condition: break
             except: pass
-            time.sleep(.25)
+            time.sleep(1)
         else:
             raise ValueError("Condition was never True.")
     
@@ -1203,7 +1191,7 @@ class selenium(object):
             try:
                 if self.get_attribute(locator): break
             except: pass
-            time.sleep(.25)
+            time.sleep(1)
         else:
             raise ValueError('Your locator: %s was not found within %s seconds.' % (locator, wait_time))
     
@@ -1212,7 +1200,7 @@ class selenium(object):
             try:
                 if not self.is_element_present(locator): break
             except: pass
-            time.sleep(.25)
+            time.sleep(1)
         else:
             raise ValueError('Your locator: %s was not found within %s seconds.' % (locator, wait_time))
     
