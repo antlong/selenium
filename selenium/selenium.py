@@ -19,7 +19,6 @@ class selenium(object):
     def setExtensionJs(self, extensionJs):
         self.extensionJs = extensionJs
     
-    
     def get_current_session_id(self):
         """Returns the current sessions ID"""
         if self.sessionId:
