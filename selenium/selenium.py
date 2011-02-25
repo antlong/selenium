@@ -31,6 +31,7 @@ class selenium(object):
         self.extensionJs = ""
         self.headers = {"Content-Type":
                 "application/x-www-form-urlencoded; charset=utf-8"}
+        self.on_error = False
     
     def setExtensionJs(self, extensionJs):
         self.extensionJs = extensionJs
@@ -60,7 +61,10 @@ class selenium(object):
         self.headers.update(**headers)
     
     def view_headers(self):
-        """View the headers you are currently sending. Content-Type is set by selenium."""
+        """
+        View the headers you are currently sending. Content-Type's value
+        is initially set by selenium.
+        """
         return self.headers
     
     def do_command(self, verb, args):
@@ -77,10 +81,19 @@ class selenium(object):
             response = conn.getresponse()
             data = unicode(response.read(), "UTF-8")
             if (not data.startswith('OK')):
+                if self.on_error:
+                    self.on_error()
                 raise Exception(data)
             return data
         finally:
             conn.close()
+    
+    def on_error(self, function):
+        def __init__(self, function):
+            self.on_error = True
+        
+        def __call__(self, function):
+            function()
     
     def get_string(self, verb, args):
         result = self.do_command(verb, args)
@@ -234,10 +247,7 @@ class selenium(object):
         self.do_command("shiftKeyDown", [])
     
     def shift_key_up(self):
-        """
-        Release the shift key.
-        
-        """
+        """Release the shift key."""
         self.do_command("shiftKeyUp", [])
     
     def meta_key_down(self):
