@@ -31,7 +31,7 @@ class selenium(object):
         self.extensionJs = ""
         self.headers = {"Content-Type":
                 "application/x-www-form-urlencoded; charset=utf-8"}
-        self.on_error = False
+        self.on_error = None
     
     def setExtensionJs(self, extensionJs):
         self.extensionJs = extensionJs
@@ -100,13 +100,11 @@ class selenium(object):
         
         def some_func():
             perform_some_actions()
+        
         selenium.on_error = some_func
         
         Do not use ()'s, since that would execute your code when you set on_error.
         """
-        def __init__(self, function):
-            self.on_error = True
-        
         def __call__(self, function):
             function()
     
@@ -171,13 +169,7 @@ class selenium(object):
         self.do_command("click", [locator, ])
     
     def double_click(self, locator):
-        """
-        Double clicks on a link, button, checkbox or radio button. If the double click action
-        causes a new page to load (like a link usually does), call
-        waitForPageToLoad.
-        
-        'locator' is an element locator
-        """
+        """Double clicks on a link, button, checkbox or radio button."""
         self.wait_for_element(locator)
         self.do_command("doubleClick", [locator, ])
     
@@ -367,8 +359,7 @@ class selenium(object):
     
     def mouse_down_at(self, locator, coordString):
         """
-        Simulates a user pressing the left mouse button (without releasing it yet) at
-        the specified location.
+        Simulates a user holding the left mouse button at the specified location.
         
         'locator' is an element locator
         'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
