@@ -22,9 +22,12 @@ class selenium(object):
     
     def get_current_session_id(self):
         """Returns the current sessions ID"""
-        return self.sessionId
+        if self.sessionId:
+            print(self.sessionId)
+        else:
+            print('No active sessions found. Use start() to make one.')
     
-    def get_all_active_session_ids(self):
+    def get_active_session_ids(self):
         """
         Returns all browser sessions you started (and are still alive) in
         your current session. If you opened a browser session outside of the
@@ -32,9 +35,9 @@ class selenium(object):
         can still attach to it, by using the sessionId in the runner window.
         """
         if self.sessionIds != []:
-            return self.sessionIds
+            print(self.sessionIds)
         else:
-            return 'No active sessions found.'
+            print('No active sessions found. Use start() to make one.')
     
     def switch_to_session(self, sessionId):
         """
@@ -43,7 +46,6 @@ class selenium(object):
         scope of this test session by using the corresponding sessionId.
         """
         self.sessionId = sessionId
-        return 'Switched to session %s' % self.sessionId
     
     def kill_session(self, sessionId):
         """
