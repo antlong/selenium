@@ -1,4 +1,5 @@
 Whats different?
+
 2/2011: Added:
 Implicit waits for all functions that take a locator. Selenium will now wait for the element to be present for 60 seconds before performing the action.
 
