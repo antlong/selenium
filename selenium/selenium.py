@@ -89,6 +89,21 @@ class selenium(object):
             conn.close()
     
     def on_error(self, function):
+        """
+        This method provides a custom error handler. If you define one, and
+        the result of one of your commands comes back as not 'OK', we will 
+        execute your custom handler.
+        
+        Usage:
+        
+        Define some functionality, then set selenium.on_error
+        
+        def some_func():
+            perform_some_actions()
+        selenium.on_error = some_func
+        
+        Do not use ()'s, since that would execute your code when you set on_error.
+        """
         def __init__(self, function):
             self.on_error = True
         

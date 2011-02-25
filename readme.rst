@@ -9,7 +9,9 @@ Functionality:
 --------------
 
 ::
-
+	Create an 'on_error' method, that will be ran whenever you encounter a failure.
+		selenium.on_error = your_func
+	
 	Add headers, and view your current headers.
 		add_headers
 		view_headers
