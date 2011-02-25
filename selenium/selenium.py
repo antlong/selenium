@@ -34,19 +34,12 @@ class selenium(object):
     
     def add_headers(self, **headers):
         """Add headers to be included in your tests. The key should be the name of your header, 
-        and the value, being the value you wish to send along with it.
-        
-        Example: 
-            my_headers = {"Test Header": "My Value"}
-            selenium.add_headers(**my_headers)
-        """
+        and the value, being the value you wish to send along with it."""
         self.headers.update(**headers)
     
     def view_headers(self):
-        """
-        View the headers you are currently sending. Content-Type's value
-        is initially set by selenium.
-        """
+        """View the headers you are currently sending. Content-Type's
+        value is initially set by selenium."""
         return self.headers
     
     def do_command(self, verb, args):
@@ -71,12 +64,9 @@ class selenium(object):
             conn.close()
     
     def on_error(self, function):
-        """
-        This method provides a custom error handler. If you define one, and
+        """This method provides a custom error handler. If you define one, and
         the result of one of your commands comes back as not 'OK', we will 
         execute your custom handler.
-        
-        Usage:
         
         Define some functionality, then set selenium.on_error
         
@@ -85,8 +75,8 @@ class selenium(object):
         
         selenium.on_error = some_func
         
-        Do not use ()'s, since that would execute your code when you set on_error.
-        """
+        Do not use ()'s, since that would execute the code when you
+        set on_error."""
         def __init__(self, function):
             self.on_error = True
         
@@ -143,13 +133,7 @@ class selenium(object):
         return boolarr
     
     def click(self, locator):
-        """
-        Clicks on a link, button, checkbox or radio button. If the click action
-        causes a new page to load (like a link usually does), call
-        waitForPageToLoad.
-        
-        'locator' is an element locator
-        """
+        """Clicks on a link, button, checkbox or radio button."""
         self.wait_for_element(locator)
         self.do_command("click", [locator, ])
     
@@ -159,35 +143,24 @@ class selenium(object):
         self.do_command("doubleClick", [locator, ])
     
     def context_menu(self, locator):
-        """
-        Simulates opening the context menu for the specified element (as might happen if the user "right-clicked" on the element).
-        
-        'locator' is an element locator
-        """
+        """Simulates opening the context menu for the specified element
+        (as might happen if the user "right-clicked" on the element)."""
         self.wait_for_element(locator)
         self.do_command("contextMenu", [locator, ])
     
     def click_at(self, locator, coordString):
-        """
-        Clicks on a link, button, checkbox or radio button. If the click action
-        causes a new page to load (like a link usually does), call
-        waitForPageToLoad.
+        """**Clicks on a link, button, checkbox or radio button.**
         
-        'locator' is an element locator
-        'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
-        """
+        **'coordString'** specifies the x,y position (i.e. - 10, 20)
+        of the mouse relative to the dimensions of the locators element.**"""
         self.wait_for_element(locator)
         self.do_command("clickAt", [locator, coordString, ])
     
     def double_click_at(self, locator, coordString):
-        """
-        Doubleclicks on a link, button, checkbox or radio button. If the action
-        causes a new page to load (like a link usually does), call
-        waitForPageToLoad.
+        """Doubleclicks on a link, button, checkbox or radio button.
         
-        'locator' is an element locator
-        'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
-        """
+        'coordString': (1, 1) specifies the x,y position of the mouse
+        event relative to the element."""
         self.wait_for_element(locator)
         self.do_command("doubleClickAt", [locator, coordString, ])
     
@@ -250,47 +223,31 @@ class selenium(object):
         self.do_command("metaKeyDown", [])
     
     def meta_key_up(self):
-        """
-        Release the meta key.
-        
-        """
+        """Release the meta key."""
         self.do_command("metaKeyUp", [])
     
     def alt_key_down(self):
-        """
-        Press the alt key and hold it down until doAltUp() is called or a new page is loaded.
-        
-        """
+        """Press the alt key and hold it down until doAltUp() is
+        called or a new page is loaded."""
         self.do_command("altKeyDown", [])
     
     def alt_key_up(self):
-        """
-        Release the alt key.
-        
-        """
+        """Release the alt key."""
         self.do_command("altKeyUp", [])
     
     def control_key_down(self):
-        """
-        Press the control key and hold it down until doControlUp() is called or a new page is loaded.
-        
-        """
+        """Press the control key and hold it down until doControlUp()
+        is called or a new page is loaded."""
         self.do_command("controlKeyDown", [])
     
     def control_key_up(self):
-        """
-        Release the control key.
-        
-        """
+        """Release the control key."""
         self.do_command("controlKeyUp", [])
     
     def key_down(self, locator, keySequence):
-        """
-        Simulates a user pressing a key (without releasing it yet).
-        
-        'locator' is an element locator
-        'keySequence' is Either be a string("\" followed by the numeric keycode  of the key to be pressed, normally the ASCII value of that key), or a single  character. For example: "w", "\119".
-        """
+        """Simulates a user pressing a key (without releasing it yet).
+        'keySequence' is a string("\" followed by the keycode of the key 
+        to be pressed, or a single character. For example: "w", "\119"."""
         self.wait_for_element(locator)
         self.do_command("keyDown", [locator,keySequence,])
     
@@ -343,12 +300,10 @@ class selenium(object):
         self.do_command("mouseDownRight", [locator,])
     
     def mouse_down_at(self, locator, coordString):
-        """
-        Simulates a user holding the left mouse button at the specified location.
+        """Simulates holding the left mouse button at the specified location.
         
-        'locator' is an element locator
-        'coordString' is specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.
-        """
+        'coordString' is specifies the x,y position (i.e. - 10, 20) of the mouse
+        event relative to the element returned by the locator."""
         self.wait_for_element(locator)
         self.do_command("mouseDownAt", [locator,coordString,])
     
@@ -844,69 +799,32 @@ class selenium(object):
         self.do_command("answerOnNextPrompt", [answer,])
     
     def go_back(self):
-        """
-        Simulates the user clicking the "back" button on their browser.
-        
-        """
+        """Simulates clicking the "back" button on their browser."""
         self.do_command("goBack", [])
     
     def refresh(self):
-        """
-        Simulates the user clicking the "Refresh" button on their browser.
-        
-        """
+        """Simulates clicking the "Refresh" button on their browser."""
         self.do_command("refresh", [])
     
     def close(self):
-        """
-        Simulates the user clicking the "close" button in the titlebar of a popup
-        window or tab.
-        
-        """
+        """Simulates clicking the "close" button in the titlebar of a popup
+        window or tab."""
         self.do_command("close", [])
     
     def is_alert_present(self):
-        """
-        Has an alert occurred?
-        
-        
-        
-        This function never throws an exception
-        
-        
-        
-        """
+        """Evaluates if an alert is present."""
         return self.get_boolean("isAlertPresent", [])
     
     def is_prompt_present(self):
-        """
-        Has a prompt occurred?
-        
-        
-        
-        This function never throws an exception
-        
-        
-        
-        """
+        """Evaluates if a prompt is present."""
         return self.get_boolean("isPromptPresent", [])
     
     def is_confirmation_present(self):
-        """
-        Has confirm() been called?
-        
-        
-        
-        This function never throws an exception
-        
-        
-        
-        """
+        """Evaluates if a confirmation is present."""
         return self.get_boolean("isConfirmationPresent", [])
     
     def get_alert(self):
-        """
-        Retrieves the message of a JavaScript alert generated during the previous action, or fail if there were no alerts.
+        """Retrieves the message of a JavaScript alert generated during the previous action, or fail if there were no alerts.
         
         
         Getting an alert has the same effect as manually clicking OK. If an
@@ -966,34 +884,21 @@ class selenium(object):
         return self.get_string("getPrompt", [])
     
     def get_location(self):
-        """
-        Gets the absolute URL of the current page.
-        
-        """
+        """Gets the absolute URL of the current page."""
         return self.get_string("getLocation", [])
     
     def get_title(self):
-        """
-        Gets the title of the current page.
-        
-        """
+        """Gets the title of the current page."""
         return self.get_string("getTitle", [])
     
     def get_body_text(self):
-        """
-        Gets the entire text of the page.
-        
-        """
+        """Gets the entire text of the page."""
         return self.get_string("getBodyText", [])
     
     def get_value(self, locator):
-        """
-        Gets the (whitespace-trimmed) value of an input field (or anything else with a value parameter).
-        For checkbox/radio elements, the value will be "on" or "off" depending on
-        whether the element is checked or not.
+        """Gets the (whitespace-trimmed) value of an input field (or anything else with a value parameter).
         
-        'locator' is an element locator
-        """
+        'locator' is an element locator."""
         self.wait_for_element(locator)
         return self.get_string("getValue", [locator,])
     
@@ -1706,24 +1611,9 @@ class selenium(object):
         self.do_command("addLocationStrategy", [strategyName,functionDefinition,])
     
     def capture_entire_page_screenshot(self, filename, kwargs):
-        """
-        Saves the entire contents of the current window canvas to a PNG file.
-        Contrast this with the captureScreenshot command, which captures the
-        contents of the OS viewport (i.e. whatever is currently being displayed
-        on the monitor), and is implemented in the RC only. Currently this only
-        works in Firefox when running in chrome mode, and in IE non-HTA using
-        the EXPERIMENTAL "Snapsie" utility. The Firefox implementation is mostly
-        borrowed from the Screengrab! Firefox extension. Please see
-        http://www.screengrab.org and http://snapsie.sourceforge.net/ for
-        details.
-        
-        'filename' is the path to the file to persist the screenshot as. No                  filename extension will be appended by default.                  Directories will not be created if they do not exist,                    and an exception will be thrown, possibly by native                  code.
-        'kwargs' is a kwargs string that modifies the way the screenshot                  is captured. Example: "background=#CCFFDD" .                  Currently valid options:
-        *    background
-            the background CSS for the HTML document. This                     may be useful to set for capturing screenshots of                     less-than-ideal layouts, for example where absolute                     positioning causes the calculation of the canvas                     dimension to fail and a black background is exposed                     (possibly obscuring black text).
-        
-        
-        """
+        """Saves the entire contents of the current window to a PNG file.
+        'filename' is the path to the file, 'kwargs' must be "background=#FFFFFF",
+        where #FFFFFF is the color you wish to use as a background."""
         self.do_command("captureEntirePageScreenshot", [filename,kwargs,])
     
     def rollup(self, rollupName, kwargs):
@@ -1852,47 +1742,25 @@ class selenium(object):
         self.do_command("shutDownSeleniumServer", [])
     
     def retrieve_last_remote_control_logs(self):
-        """
-        Retrieve the last messages logged on a specific remote control. Useful for error reports, especially
-        when running multiple remote controls in a distributed environment. The maximum number of log messages
-        that can be retrieve is configured on remote control startup.
-        
-        """
+        """Retrieve the last messages logged on a specific remote control.
+        Maximum logs to retrieve can be set when launching selenium server."""
         return self.get_string("retrieveLastRemoteControlLogs", [])
     
     def key_down_native(self, keycode):
-        """
-        Simulates a user pressing a key (without releasing it yet) by sending a native operating system keystroke.
-        This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
-        a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
-        metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
-        element, focus on the element first before running this command.
-        
-        'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
-        """
+        """Simulates a user holding a key by sending a native operating system keystroke.
+        'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent;
+        note that Java keycodes are NOT the same thing as JavaScript keycodes!"""
         self.do_command("keyDownNative", [keycode,])
     
     def key_up_native(self, keycode):
-        """
-        Simulates a user releasing a key by sending a native operating system keystroke.
-        This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
-        a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
-        metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
-        element, focus on the element first before running this command.
-        
-        'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
-        """
+        """Simulates a user releasing a key by sending a native operating system keystroke.
+        'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent;
+        note that Java keycodes are NOT the same thing as JavaScript keycodes!"""
         self.do_command("keyUpNative", [keycode,])
     
     def key_press_native(self, keycode):
-        """
-        Simulates a user pressing and releasing a key by sending a native operating system keystroke.
-        This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
-        a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
-        metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
-        element, focus on the element first before running this command.
-        
-        'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
-        """
+        """Simulates a user pressing and releasing a key by sending a native operating system keystroke.
+        'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent;
+        note that Java keycodes are NOT the same thing as JavaScript keycodes!"""
         self.do_command("keyPressNative", [keycode,])
     
