@@ -2,7 +2,7 @@ Improved Selenium 1 bindings.
 ====================================================
 by Anthony Long.
 
-Whats different?
+Whats New?
 ================
 
 Functionality:
@@ -37,3 +37,10 @@ Functionality:
 		wait_until
 		wait_for_attribute
 		wait_for_attribute_to_disappear
+
+
+What's coming up?
+=================
+
+1: Built in, intelligent support for javascript libraries such as Moo Tools, Prototype and more.
+2: Better methods for validating attributes.
