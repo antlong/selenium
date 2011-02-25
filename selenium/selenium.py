@@ -29,6 +29,8 @@ class selenium(object):
         self.browserURL = browserURL
         self.sessionId = None
         self.extensionJs = ""
+        self.headers = {"Content-Type":
+                "application/x-www-form-urlencoded; charset=utf-8"}
     
     def setExtensionJs(self, extensionJs):
         self.extensionJs = extensionJs
@@ -47,6 +49,20 @@ class selenium(object):
         self.do_command("testComplete", [])
         #self.sessionId = None
     
+    def add_headers(self, **headers):
+        """Add headers to be included in your tests. The key should be the name of your header, 
+        and the value, being the value you wish to send along with it.
+        
+        Example: 
+            my_headers = {"Test Header": "My Value"}
+            selenium.add_headers(**my_headers)
+        """
+        self.headers.update(**headers)
+    
+    def view_headers(self):
+        """View the headers you are currently sending. Content-Type is set by selenium."""
+        return self.headers
+    
     def do_command(self, verb, args):
         conn = httplib.HTTPConnection(self.host, self.port)
         try:
@@ -56,8 +72,7 @@ class selenium(object):
                         urllib.quote_plus(unicode(args[i]).encode('utf-8'))
             if (None != self.sessionId):
                 body += "&sessionId=" + unicode(self.sessionId)
-            headers = {"Content-Type":
-                "application/x-www-form-urlencoded; charset=utf-8"}
+            headers = self.headers
             conn.request("POST", "/selenium-server/driver/", body, headers)
             response = conn.getresponse()
             data = unicode(response.read(), "UTF-8")
