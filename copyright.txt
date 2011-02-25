@@ -1,0 +1,5 @@
+Modified by Anthony Long, 2010 - 2011.
+Re-released under the 'No Commercial Use Without Explicit Written Permission From Anthony Long License'.
+
+Originals' copyright, 2006 ThoughtWorks, Inc.
+Original license: Apache V2.
