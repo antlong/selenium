@@ -13,6 +13,7 @@ class selenium(object):
         self.extensionJs = ""
         self.headers = {"Content-Type":
                 "application/x-www-form-urlencoded; charset=utf-8"}
+        self.on_error = False
     
     def setExtensionJs(self, extensionJs):
         self.extensionJs = extensionJs
@@ -86,6 +87,9 @@ class selenium(object):
         
         Do not use ()'s, since that would execute your code when you set on_error.
         """
+        def __init__(self, function):
+            self.on_error = True
+        
         def __call__(self, function):
             function()
     

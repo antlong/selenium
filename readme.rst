@@ -1,6 +1,6 @@
-Selenium Resurrection: Improved Selenium 1 bindings.
+Improved Selenium 1 bindings.
 ====================================================
-Resurrected by Anthony Long.
+by Anthony Long.
 
 Whats different?
 ================
