@@ -15,6 +15,7 @@ Functionality:
 		view_headers
 	
 	True implicit waits for all functions that take a locator.
+		you_dont_have_to_do_a_thing
 	
 	Wait for things to happen with:
 		wait_for_element
