@@ -10,6 +10,7 @@ class selenium(object):
         self.browserStartCommand = browserStartCommand
         self.browserURL = browserURL
         self.sessionId = None
+        self.sessionIds = []
         self.extensionJs = ""
         self.headers = {"Content-Type":
                 "application/x-www-form-urlencoded; charset=utf-8"}
@@ -17,6 +18,46 @@ class selenium(object):
     
     def setExtensionJs(self, extensionJs):
         self.extensionJs = extensionJs
+    
+    
+    def get_current_session_id(self):
+        """Returns the current sessions ID"""
+        return self.sessionId
+    
+    def get_all_active_session_ids(self):
+        """
+        Returns all browser sessions you started (and are still alive) in
+        your current session. If you opened a browser session outside of the
+        scope of your current session, you can not view the sessionId, but you
+        can still attach to it, by using the sessionId in the runner window.
+        """
+        if self.sessionIds != []:
+            return self.sessionIds
+        else:
+            return 'No active sessions found.'
+    
+    def switch_to_session(self, sessionId):
+        """
+        Switches to the session you specify. The sessionId can be an id from
+        any active session. You can also attach to one that you opened outside of the
+        scope of this test session by using the corresponding sessionId.
+        """
+        self.sessionId = sessionId
+        return 'Switched to session %s' % self.sessionId
+    
+    def kill_session(self, sessionId):
+        """
+        Kills the session attached to the sessionId you specify. If the
+        sessionId is different than your current session, we will kill the appropriate
+        session without altering your current session.
+        """
+        current_session = self.sessionId
+        if sessionId == self.sessionId:
+            self.stop()
+        else:
+            self.sessionId = sessionId
+            self.stop()
+            self.sessionId = current_session
     
     def start(self, browserConfigurationOptions=None):
         start_args = [self.browserStartCommand, self.browserURL, self.extensionJs]
@@ -27,10 +68,12 @@ class selenium(object):
             self.sessionId = result
         except ValueError:
             raise Exception(result)
+        self.sessionIds.append(self.sessionId)
     
     def stop(self):
         self.do_command("testComplete", [])
-        #self.sessionId = None
+        self.sessionIds.remove(self.sessionId)
+        self.sessionId = None
     
     def add_headers(self, **headers):
         """Add headers to be included in your tests. The key should be the name of your header, 
