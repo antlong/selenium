@@ -9,11 +9,12 @@ Functionality:
 --------------
 
 ::
-	Ability to switch to any other active session.
-	Ability to intelligently kill other sessions: Will not end current session if another ID is specified.
+
+	Switch to any other active session.
+	Intelligently kill other sessions, will not end current session if another session ID is specified.
 		New calls:
 			get_current_session_id
-			get_all_active_session_ids
+			get_active_session_ids
 			switch_to_session
 			kill_session
 		
