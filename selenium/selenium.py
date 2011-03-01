@@ -73,7 +73,8 @@ class selenium(object):
     
     def stop(self):
         self.do_command("testComplete", [])
-        self.sessionIds.remove(self.sessionId)
+        if len(self.sessionIds) > 1:
+            self.sessionIds.remove(self.sessionId)
         self.sessionId = None
     
     def add_headers(self, **headers):
