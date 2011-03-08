@@ -9,7 +9,10 @@ Functionality:
 --------------
 
 ::
-
+	
+	Block until the count of an xpath query returns a specific number.
+		wait_for_xpath_count(xpath, number, wait_time).
+	
 	Switch to any other active session.
 	Intelligently kill other sessions, will not end current session if another session ID is specified.
 		New calls:

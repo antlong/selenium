@@ -1433,6 +1433,15 @@ class selenium(object):
         """
         return self.get_number("getXpathCount", [xpath,])
     
+    def wait_for_xpath_count(self, xpath, number, wait_time=60):
+        for i in xrange(wait_time):
+            try:
+                if self.get_number("getXpathCount", [xpath,]) == number: break
+            except: pass
+            time.sleep(1)
+        else:
+            raise ValueError("An xpath count of %s was never found." % str(number))
+    
     def assign_id(self, locator, identifier):
         """
         Temporarily sets the "id" attribute of the specified element, so you can locate it in the future
