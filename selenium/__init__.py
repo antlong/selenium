@@ -1,3 +1,4 @@
+# Copyright 2011 Anthony Long
 # Copyright 2008-2010 WebDriver committers
 # Copyright 2008-2010 Google Inc.
 #

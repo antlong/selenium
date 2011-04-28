@@ -1,37 +1,40 @@
 Improved Selenium 1 bindings.
-====================================================
+=============================
 by Anthony Long.
 
 Whats New?
-================
+==========
 
 Functionality:
 --------------
 
 ::
 	
+	Wait for one of two conditions to happens before continuing.
+	    wait_for_either("//*[contains(@class, 'foo-empty')]", "//*[contains(@class, 'foo-full')]")
+	
 	Block until the count of an xpath query returns a specific number.
-		wait_for_xpath_count(xpath, number, wait_time).
+		wait_for_xpath_count(xpath, number, [wait_time=60]).
 	
 	Switch to any other active session.
 	Intelligently kill other sessions, will not end current session if another session ID is specified.
-		New calls:
+		New commands:
 			get_current_session_id
 			get_active_session_ids
 			switch_to_session
 			kill_session
 		
 	Create an 'on_error' method, that will be ran whenever you encounter a failure.
-		New calls:
+		New command:
 			selenium.on_error = your_func
 	
 	Add headers, and view your current headers.
-		New calls:
+		New commands:
 			add_headers
 			view_headers
 	
 	True implicit waits for all functions that take a locator.
-		New calls:
+		New commands:
 			This is done automatically for you.
 	
 	Wait for things to happen with:
